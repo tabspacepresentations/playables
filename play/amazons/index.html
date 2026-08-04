@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Amazons - Tabspace Playables</title>
+    <meta name="description" content="Play classic Game of the Amazons online for free on Tabspace Playables. Territory control and blocking strategy game on desktop and mobile.">
+    <meta name="keywords" content="Amazons online, Game of the Amazons, play Amazons free, board games online, Tabspace Playables, territory strategy game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/amazons">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Amazons - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Game of the Amazons. Move your queens, shoot arrows, and trap your opponent!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/amazons">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .amazons-cell {
+            background-color: #166534;
+            border: 1px solid #14532d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.15s ease;
+            position: relative;
+        }
+        .amazons-cell:hover {
+            background-color: #15803d;
+        }
+        .amazon-piece {
+            width: 75%;
+            height: 75%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            transition: transform 0.2s ease;
+        }
+        .amazon-piece.white {
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #a1a1aa 100%);
+            color: #000;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .amazon-piece.black {
+            background: radial-gradient(circle at 30% 30%, #52525b 0%, #09090b 100%);
+            color: #fff;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .arrow-piece {
+            width: 40%;
+            height: 40%;
+            background-color: #dc2626;
+            transform: rotate(45deg);
+            border-radius: 2px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.5);
+        }
+        .amazons-cell.selected {
+            background-color: #22c55e !important;
+            border-color: #16a34a;
+        }
+        .amazons-cell.valid-move {
+            background-color: rgba(34, 197, 94, 0.4);
+        }
+        .amazons-cell.valid-arrow {
+            background-color: rgba(220, 38, 38, 0.4);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-4 md:px-6 py-3 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 md:gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-12 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-base md:text-2xl font-light">/ Amazons</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-3 md:px-5 py-2 text-xs md:text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-3 md:px-6 py-4 md:py-8 space-y-4 md:space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <!-- Header Section with Centered Name -->
+        <div class="w-full flex flex-col items-center justify-center gap-2 md:gap-3 text-center">
+            <h1 class="text-2xl md:text-4xl tracking-tight text-white">Game of the Amazons</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-base px-2">White's turn: Select an Amazon queen to move like a chess queen.</p>
+        </div>
+
+        <!-- Game Board Container -->
+        <div class="card-section p-3 md:p-6 bg-zinc-900/90 border border-zinc-700 shadow-xl relative overflow-hidden flex flex-col items-center justify-center w-full max-w-[480px] space-y-3 md:space-y-4">
+            <div class="overflow-x-auto w-full flex justify-center">
+                <div id="grid-container" class="grid grid-cols-8 gap-0.5 select-none bg-emerald-950 p-1.5 rounded-lg border border-emerald-900">
+                    <!-- Dynamically generated via script -->
+                </div>
+            </div>
+            
+            <!-- Side-by-side New Game and Fullscreen Buttons -->
+            <div class="flex items-center justify-center gap-3 md:gap-4 pt-2 w-full border-t border-zinc-800">
+                <button onclick="resetGame(event)" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>New Game</span> 
+                </button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-6 md:p-8 max-w-md w-full mx-4 text-center space-y-4 md:space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl z-50">
+                <h2 id="modal-title" class="text-xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-sm md:text-base">No moves remaining!</p>
+                <div>
+                    <button onclick="closeModalAndReset(event)" class="cta-btn-green px-6 md:px-8 py-2.5 md:py-3 text-sm md:text-base w-full cursor-pointer">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-4 md:py-6 border-t border-zinc-900 text-center px-4">
+        <p class="text-[11px] md:text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-emerald-500">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'move') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(500, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+                gainNode.gain.setValueAtTime(0.12, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const size = 8;
+        let board = [];
+        let currentPlayer = 'white'; // 'white' or 'black'
+        let phase = 'move'; // 'move' or 'shoot'
+        let selectedAmazon = null;
+        let validMoves = [];
+        let isGameActive = true;
+
+        const directions = [
+            [-1, 0], [1, 0], [0, -1], [0, 1],
+            [-1, -1], [-1, 1], [1, -1], [1, 1]
+        ];
+
+        const gridContainer = document.getElementById('grid-container');
+        const resultModal = document.getElementById('result-modal');
+        const gameStatus = document.getElementById('game-status');
+
+        function resetGame(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            board = Array(size).fill(null).map(() => Array(size).fill(0));
+            currentPlayer = 'white';
+            phase = 'move';
+            selectedAmazon = null;
+            validMoves = [];
+            isGameActive = true;
+            resultModal.classList.add('hidden');
+
+            // Initial Setup for 8x8 Amazons:
+            // White Amazons at (0,2), (2,0), (5,0), (7,2) -> wait standard setup:
+            // White: (2,0), (5,0), (0,2), (7,2) or traditional setup:
+            // (0,2), (2,0), (5,7), (7,5) etc. Let's use standard symmetric setup:
+            // White queens at (0, 2), (2, 0), (5, 0), (7, 2) [0-indexed: row, col]
+            // Black queens at (0, 5), (2, 7), (5, 7), (7, 5)
+            
+            // Standard standard setup:
+            board[0][2] = 'W'; board[2][0] = 'W'; board[5][0] = 'W'; board[7][2] = 'W';
+            board[0][5] = 'B'; board[2][7] = 'B'; board[5][7] = 'B'; board[7][5] = 'B';
+
+            updateStatus();
+            renderGrid();
+        }
+
+        function updateStatus() {
+            if (!isGameActive) return;
+            if (currentPlayer === 'white') {
+                gameStatus.textContent = phase === 'move' 
+                    ? "White's turn: Select your Amazon queen to move." 
+                    : "White's turn: Fire an arrow from your queen's new position.";
+            } else {
+                gameStatus.textContent = phase === 'move' 
+                    ? "Black's turn (AI is moving...)" 
+                    : "Black's turn (AI is shooting arrow...)";
+            }
+        }
+
+        function getRayMoves(r, c) {
+            let moves = [];
+            for (let [dr, dc] of directions) {
+                let step = 1;
+                while (true) {
+                    let nr = r + dr * step;
+                    let nc = c + dc * step;
+                    if (nr < 0 || nr >= size || nc < 0 || nc >= size) break;
+                    if (board[nr][nc] !== 0) break; // Blocked by piece or arrow
+                    moves.push({r: nr, c: nc});
+                    step++;
+                }
+            }
+            return moves;
+        }
+
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            let cellSizePx = window.innerWidth < 400 ? 38 : (window.innerWidth < 640 ? 44 : 48);
+
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    let cell = document.createElement('div');
+                    cell.style.width = `${cellSizePx}px`;
+                    cell.style.height = `${cellSizePx}px`;
+                    cell.className = "amazons-cell rounded-sm";
+
+                    let val = board[r][c];
+                    let isSelected = selectedAmazon && selectedAmazon.r === r && selectedAmazon.c === c;
+                    let isValidMove = validMoves.some(m => m.r === r && m.c === c);
+
+                    if (isSelected) {
+                        cell.classList.add('selected');
+                    } else if (isValidMove) {
+                        if (phase === 'move') cell.classList.add('valid-move');
+                        else cell.classList.add('valid-arrow');
+                    }
+
+                    if (val === 'W' || val === 'B') {
+                        let piece = document.createElement('div');
+                        piece.className = `amazon-piece ${val === 'W' ? 'white' : 'black'}`;
+                        piece.textContent = val;
+                        cell.appendChild(piece);
+                    } else if (val === 'X') {
+                        let arrow = document.createElement('div');
+                        arrow.className = 'arrow-piece';
+                        cell.appendChild(arrow);
+                    }
+
+                    cell.addEventListener('click', () => {
+                        if (!isGameActive || currentPlayer !== 'white') return;
+                        handleCellClick(r, c);
+                    });
+
+                    gridContainer.appendChild(cell);
+                }
+            }
+        }
+
+        function handleCellClick(r, c) {
+            let val = board[r][c];
+
+            if (phase === 'move') {
+                if (val === (currentPlayer === 'white' ? 'W' : 'B')) {
+                    selectedAmazon = {r, c};
+                    validMoves = getRayMoves(r, c);
+                    playSound('click');
+                    renderGrid();
+                } else if (validMoves.some(m => m.r === r && m.c === c)) {
+                    // Execute Move
+                    board[selectedAmazon.r][selectedAmazon.c] = 0;
+                    board[r][c] = currentPlayer === 'white' ? 'W' : 'B';
+                    playSound('move');
+                    
+                    // Transition to arrow shooting phase from new position
+                    selectedAmazon = {r, c};
+                    phase = 'shoot';
+                    validMoves = getRayMoves(r, c);
+                    updateStatus();
+                    renderGrid();
+                }
+            } else if (phase === 'shoot') {
+                if (validMoves.some(m => m.r === r && m.c === c)) {
+                    // Fire arrow
+                    board[r][c] = 'X';
+                    playSound('move');
+
+                    // End turn, check if next player has moves
+                    phase = 'move';
+                    selectedAmazon = null;
+                    validMoves = [];
+                    currentPlayer = currentPlayer === 'white' ? 'black' : 'white';
+                    updateStatus();
+                    renderGrid();
+
+                    if (!hasAnyMoves(currentPlayer)) {
+                        endGame();
+                    } else if (currentPlayer === 'black' && isGameActive) {
+                        setTimeout(aiTurn, 600);
+                    }
+                }
+            }
+        }
+
+        function hasAnyMoves(player) {
+            let pChar = player === 'white' ? 'W' : 'B';
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    if (board[r][c] === pChar) {
+                        if (getRayMoves(r, c).length > 0) return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        function aiTurn() {
+            if (!isGameActive) return;
+
+            // Collect all Black queens with valid moves
+            let blackQueens = [];
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    if (board[r][c] === 'B') {
+                        let moves = getRayMoves(r, c);
+                        if (moves.length > 0) blackQueens.push({r, c, moves});
+                    }
+                }
+            }
+
+            if (blackQueens.length === 0) {
+                endGame();
+                return;
+            }
+
+            // Pick a random queen and move
+            let q = blackQueens[Math.floor(Math.random() * blackQueens.length)];
+            let m = q.moves[Math.floor(Math.random() * q.moves.length)];
+
+            board[q.r][q.c] = 0;
+            board[m.r][m.c] = 'B';
+            playSound('move');
+            renderGrid();
+
+            setTimeout(() => {
+                // AI shoots arrow from new position
+                let arrowMoves = getRayMoves(m.r, m.c);
+                if (arrowMoves.length > 0) {
+                    let am = arrowMoves[Math.floor(Math.random() * arrowMoves.length)];
+                    board[am.r][am.c] = 'X';
+                    playSound('move');
+                }
+
+                currentPlayer = 'white';
+                phase = 'move';
+                updateStatus();
+                renderGrid();
+
+                if (!hasAnyMoves('white')) {
+                    endGame();
+                }
+            }, 500);
+        }
+
+        function endGame() {
+            isGameActive = false;
+            playSound('win');
+            let winner = currentPlayer === 'white' ? 'Black' : 'White';
+            document.getElementById('modal-title').textContent = `${winner} Wins!`;
+            document.getElementById('modal-message').textContent = `${currentPlayer === 'white' ? 'You' : 'Opponent'} have no legal moves remaining.`;
+            resultModal.classList.remove('hidden');
+        }
+
+        function closeModalAndReset(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        window.addEventListener('resize', () => {
+            renderGrid();
+        });
+
+        resetGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Hex - Tabspace Playables</title>
+    <meta name="description" content="Play classic Hex connection board game online for free on Tabspace Playables. Connect opposite sides of the board on desktop and mobile.">
+    <meta name="keywords" content="Hex online, board games online, play hex free, puzzle games online, Tabspace Playables, strategy game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/hex">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Hex - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Hex board game. Connect your opposite sides and win the match!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/hex">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Hex</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Hex Connection Game</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Your turn (Red - Connect Left to Right)</p>
+        </div>
+
+        <!-- Difficulty Controls -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+            <button type="button" onclick="setDifficulty('easy')" id="btn-easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy</button>
+            <button type="button" onclick="setDifficulty('medium')" id="btn-medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Medium</button>
+            <button type="button" onclick="setDifficulty('hard')" id="btn-hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Hard</button>
+        </div>
+
+        <!-- Hex Board Container -->
+        <div class="card-section p-3 bg-zinc-900/95 w-full max-w-[420px] aspect-square flex items-center justify-center relative">
+            <canvas id="hex-canvas" class="w-full h-full cursor-pointer touch-none"></canvas>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-2">
+            <button type="button" onclick="resetGame()" class="cta-btn-green px-6 py-2 text-sm">New Game</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Game concluded.</p>
+                <div>
+                    <button type="button" onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const BOARD_SIZE = 8;
+        let board = [];
+        let turn = 'red';
+        let isGameActive = true;
+        let difficulty = 'easy';
+        let isAiTurn = false;
+
+        const canvas = document.getElementById('hex-canvas');
+        const ctx = canvas.getContext('2d');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        let statusDisplay = document.getElementById('game-status');
+
+        function setDifficulty(level) {
+            playSound('click');
+            difficulty = level;
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === level) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all";
+                }
+            });
+            resetGame();
+        }
+
+        function resetGame() {
+            playSound('click');
+            board = Array(BOARD_SIZE).fill(null).map(() => Array(BOARD_SIZE).fill(null));
+            turn = 'red';
+            isGameActive = true;
+            isAiTurn = false;
+            statusDisplay.textContent = "Your turn (Red - Connect Left to Right)";
+            resizeCanvas();
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            renderBoard();
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        function getHexCenters() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            
+            const hexRadius = Math.min(width, height) / (BOARD_SIZE * 1.8);
+            const centers = [];
+            
+            const xOffset = width / 2 - (BOARD_SIZE * hexRadius * 0.85);
+            const yOffset = height / 2 - (BOARD_SIZE * hexRadius * 0.95);
+
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                centers[r] = [];
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    let x = xOffset + c * hexRadius * 1.732 + r * hexRadius * 0.866;
+                    let y = yOffset + r * hexRadius * 1.5;
+                    centers[r][c] = { x, y, radius: hexRadius * 0.9 };
+                }
+            }
+            return centers;
+        }
+
+        function renderBoard() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.fillStyle = '#27272a';
+            ctx.fillRect(0, 0, width, height);
+
+            const centers = getHexCenters();
+
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    let hex = centers[r][c];
+                    drawHexagon(hex.x, hex.y, hex.radius, board[r][c]);
+                }
+            }
+        }
+
+        function drawHexagon(x, y, radius, owner) {
+            ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                let angle = (Math.PI / 3) * i;
+                let hx = x + radius * Math.cos(angle);
+                let hy = y + radius * Math.sin(angle);
+                if (i === 0) ctx.moveTo(hx, hy);
+                else ctx.lineTo(hx, hy);
+            }
+            ctx.closePath();
+
+            if (owner === 'red') {
+                ctx.fillStyle = '#ef4444';
+            } else if (owner === 'blue') {
+                ctx.fillStyle = '#3b82f6';
+            } else {
+                ctx.fillStyle = '#3f3f46';
+            }
+            ctx.fill();
+            ctx.lineWidth = 1.5;
+            ctx.strokeStyle = '#52525b';
+            ctx.stroke();
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (!isGameActive || isAiTurn || turn !== 'red') return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const centers = getHexCenters();
+
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    let hex = centers[r][c];
+                    let dist = Math.hypot(x - hex.x, y - hex.y);
+                    if (dist < hex.radius) {
+                        if (!board[r][c]) {
+                            makeMove(r, c, 'red');
+                        }
+                        return;
+                    }
+                }
+            }
+        });
+
+        function makeMove(r, c, player) {
+            board[r][c] = player;
+            playSound('click');
+            renderBoard();
+
+            if (checkWin(player)) {
+                endGame(player);
+                return;
+            }
+
+            if (player === 'red') {
+                turn = 'blue';
+                isAiTurn = true;
+                statusDisplay.textContent = "Computer is thinking...";
+                let delay = difficulty === 'easy' ? 400 : difficulty === 'medium' ? 600 : 800;
+                setTimeout(aiMove, delay);
+            } else {
+                turn = 'red';
+                isAiTurn = false;
+                statusDisplay.textContent = "Your turn (Red - Connect Left to Right)";
+            }
+        }
+
+        function aiMove() {
+            if (!isGameActive) return;
+
+            let emptySpots = [];
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    if (!board[r][c]) emptySpots.push({ r, c });
+                }
+            }
+
+            if (emptySpots.length > 0) {
+                let bestMove = emptySpots[Math.floor(Math.random() * emptySpots.length)];
+                if (difficulty !== 'easy') {
+                    let center = Math.floor(BOARD_SIZE / 2);
+                    let centerSpot = emptySpots.find(s => Math.abs(s.r - center) <= 1 && Math.abs(s.c - center) <= 1);
+                    if (centerSpot) bestMove = centerSpot;
+                }
+                makeMove(bestMove.r, bestMove.c, 'blue');
+            }
+        }
+
+        function checkWin(player) {
+            let queue = [];
+            let visited = Array(BOARD_SIZE).fill(null).map(() => Array(BOARD_SIZE).fill(false));
+
+            if (player === 'red') {
+                for (let r = 0; r < BOARD_SIZE; r++) {
+                    if (board[r][0] === 'red') {
+                        queue.push({ r, c: 0 });
+                        visited[r][0] = true;
+                    }
+                }
+            } else {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    if (board[0][c] === 'blue') {
+                        queue.push({ r: 0, c });
+                        visited[0][c] = true;
+                    }
+                }
+            }
+
+            while (queue.length > 0) {
+                let current = queue.shift();
+                let r = current.r;
+                let c = current.c;
+
+                if (player === 'red' && c === BOARD_SIZE - 1) return true;
+                if (player === 'blue' && r === BOARD_SIZE - 1) return true;
+
+                const dirs = [
+                    [-1, 0], [-1, 1],
+                    [0, -1], [0, 1],
+                    [1, -1], [1, 0]
+                ];
+
+                for (let i = 0; i < dirs.length; i++) {
+                    let dr = dirs[i][0];
+                    let dc = dirs[i][1];
+                    let nr = r + dr;
+                    let nc = c + dc;
+                    if (nr >= 0 && nr < BOARD_SIZE && nc >= 0 && nc < BOARD_SIZE) {
+                        if (board[nr][nc] === player && !visited[nr][nc]) {
+                            visited[nr][nc] = true;
+                            queue.push({ r: nr, c: nc });
+                        }
+                    }
+                }
+            }
+            return false;
+        }
+
+        function endGame(winner) {
+            isGameActive = false;
+            if (winner === 'red') {
+                playSound('win');
+                modalTitle.textContent = "Victory!";
+                modalMessage.textContent = "Brilliant! You successfully connected the left and right sides!";
+            } else {
+                playSound('lose');
+                modalTitle.textContent = "Computer Wins!";
+                modalMessage.textContent = "The computer connected the top and bottom sides first! Try again.";
+            }
+            resultModal.classList.remove('hidden');
+            statusDisplay.textContent = "Game Over";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

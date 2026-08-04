@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Abalone - Tabspace Playables</title>
+    <meta name="description" content="Play classic Abalone online for free on Tabspace Playables. Push your opponent's marbles off the hex board on desktop and mobile.">
+    <meta name="keywords" content="Abalone online, Abalone game, play Abalone free, board games online, Tabspace Playables, strategy board game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/abalone">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Abalone - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Abalone board game. Push opposing marbles off the hexagonal board to claim victory!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/abalone">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .abalone-marble {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .abalone-marble.black {
+            background: radial-gradient(circle at 30% 30%, #52525b 0%, #09090b 100%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.6);
+        }
+        .abalone-marble.white {
+            background: radial-gradient(circle at 30% 30%, #ffffff 0%, #a1a1aa 100%);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+        }
+        .abalone-marble.empty {
+            background-color: rgba(39, 39, 42, 0.4);
+            border: 1px dashed rgba(82, 82, 91, 0.5);
+            cursor: default;
+        }
+        .abalone-marble.selected {
+            box-shadow: 0 0 0 3px var(--accent-green);
+            transform: scale(1.1);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-4 md:px-6 py-3 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 md:gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-12 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-base md:text-2xl font-light">/ Abalone</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-3 md:px-5 py-2 text-xs md:text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-3 md:px-6 py-4 md:py-8 space-y-4 md:space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <!-- Header Section with Centered Name -->
+        <div class="w-full flex flex-col items-center justify-center gap-2 md:gap-3 text-center">
+            <h1 class="text-2xl md:text-4xl tracking-tight text-white">Abalone</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-base px-2">Black's turn. Select your marble and click an adjacent empty space to move.</p>
+        </div>
+
+        <!-- Score & Captures Controls -->
+        <div class="flex flex-wrap items-center justify-center gap-4 md:gap-8 bg-zinc-900/60 px-4 py-2.5 rounded-xl border border-zinc-800 text-xs md:text-sm">
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-3 h-3 rounded-full bg-zinc-900 border border-zinc-700"></span>
+                <span class="text-zinc-300">Black Marbles Pushed Off: <strong id="score-black" class="text-white">0 / 6</strong></span>
+            </div>
+            <div class="h-4 w-[1px] bg-zinc-700 hidden sm:block"></div>
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-3 h-3 rounded-full bg-zinc-100 border border-zinc-300"></span>
+                <span class="text-zinc-300">White Marbles Pushed Off: <strong id="score-white" class="text-white">0 / 6</strong></span>
+            </div>
+        </div>
+
+        <!-- Game Board Container -->
+        <div class="card-section p-4 md:p-6 bg-zinc-900/90 border border-zinc-700 shadow-xl relative overflow-hidden flex flex-col items-center justify-center w-full max-w-[560px] space-y-3 md:space-y-4">
+            <div class="overflow-x-auto w-full flex justify-center py-2">
+                <div id="board-container" class="flex flex-col items-center gap-1.5 select-none bg-emerald-950/60 p-3 rounded-xl border border-emerald-900/80">
+                    <!-- Dynamically generated via script -->
+                </div>
+            </div>
+            
+            <!-- Side-by-side New Game and Fullscreen Buttons -->
+            <div class="flex items-center justify-center gap-3 md:gap-4 pt-2 w-full border-t border-zinc-800">
+                <button onclick="resetGame(event)" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>New Game</span> 
+                </button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-6 md:p-8 max-w-md w-full mx-4 text-center space-y-4 md:space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl z-50">
+                <h2 id="modal-title" class="text-xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-sm md:text-base">Victory achieved!</p>
+                <div>
+                    <button onclick="closeModalAndReset(event)" class="cta-btn-green px-6 md:px-8 py-2.5 md:py-3 text-sm md:text-base w-full cursor-pointer">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-4 md:py-6 border-t border-zinc-900 text-center px-4">
+        <p class="text-[11px] md:text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-emerald-500">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'move') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(350, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.08);
+                gainNode.gain.setValueAtTime(0.12, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const rowLengths = [5, 6, 7, 8, 9, 8, 7, 6, 5];
+        let board = [];
+        let currentPlayer = 1; // 1: Black, 2: White (AI)
+        let capturedBlack = 0;
+        let capturedWhite = 0;
+        let selectedMarble = null;
+        let isGameActive = true;
+
+        const boardContainer = document.getElementById('board-container');
+        const resultModal = document.getElementById('result-modal');
+        const gameStatus = document.getElementById('game-status');
+
+        function resetGame(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            capturedBlack = 0;
+            capturedWhite = 0;
+            currentPlayer = 1;
+            selectedMarble = null;
+            isGameActive = true;
+            resultModal.classList.add('hidden');
+            
+            initBoard();
+            updateStatus();
+            renderBoard();
+        }
+
+        function initBoard() {
+            board = [];
+            for (let r = 0; r < rowLengths.length; r++) {
+                board.push(Array(rowLengths[r]).fill(0));
+            }
+
+            // Setup Standard Abalone Initial Layout
+            board[0].fill(2);
+            board[1].fill(2);
+            board[2][2] = 2; board[2][3] = 2; board[2][4] = 2;
+
+            board[8].fill(1);
+            board[7].fill(1);
+            board[6][2] = 1; board[6][3] = 1; board[6][4] = 1;
+        }
+
+        function updateStatus() {
+            document.getElementById('score-black').textContent = `${capturedBlack} / 6`;
+            document.getElementById('score-white').textContent = `${capturedWhite} / 6`;
+            if (isGameActive) {
+                gameStatus.textContent = currentPlayer === 1 
+                    ? "Black's turn. Select your marble, then click an adjacent empty space." 
+                    : "White's turn (AI is thinking...)";
+            }
+        }
+
+        function renderBoard() {
+            boardContainer.innerHTML = '';
+            for (let r = 0; r < board.length; r++) {
+                let rowDiv = document.createElement('div');
+                rowDiv.className = "flex items-center justify-center gap-1.5";
+                
+                for (let c = 0; c < board[r].length; c++) {
+                    let marble = document.createElement('div');
+                    let val = board[r][c];
+                    let isSelected = selectedMarble && selectedMarble.r === r && selectedMarble.c === c;
+
+                    let clazz = "abalone-marble ";
+                    if (val === 1) clazz += "black";
+                    else if (val === 2) clazz += "white";
+                    else clazz += "empty";
+
+                    if (isSelected) clazz += " selected";
+                    marble.className = clazz;
+
+                    marble.addEventListener('click', () => {
+                        if (!isGameActive || currentPlayer !== 1) return;
+                        handleCellClick(r, c);
+                    });
+
+                    rowDiv.appendChild(marble);
+                }
+                boardContainer.appendChild(rowDiv);
+            }
+        }
+
+        function handleCellClick(r, c) {
+            let val = board[r][c];
+            if (val === 1) {
+                selectedMarble = {r, c};
+                playSound('click');
+                renderBoard();
+            } else if (val === 0 && selectedMarble) {
+                // Check if target is adjacent
+                if (isAdjacent(selectedMarble.r, selectedMarble.c, r, c)) {
+                    board[selectedMarble.r][selectedMarble.c] = 0;
+                    board[r][c] = 1;
+                    selectedMarble = null;
+                    playSound('move');
+                    renderBoard();
+                    checkWin();
+
+                    if (isGameActive) {
+                        currentPlayer = 2;
+                        updateStatus();
+                        setTimeout(aiTurn, 600);
+                    }
+                } else {
+                    selectedMarble = null;
+                    renderBoard();
+                }
+            }
+        }
+
+        function isAdjacent(r1, c1, r2, c2) {
+            let dr = r2 - r1;
+            let dc = c2 - c1;
+            // Valid hex neighborhood offset checks based on row transition
+            if (dr === 0 && Math.abs(dc) === 1) return true;
+            if (dr === -1 && (dc === 0 || dc === 1)) return true;
+            if (dr === 1 && (dc === -1 || dc === 0)) return true;
+            return false;
+        }
+
+        function aiTurn() {
+            if (!isGameActive) return;
+
+            let whiteMarbles = [];
+            for (let r = 0; r < board.length; r++) {
+                for (let c = 0; c < board[r].length; c++) {
+                    if (board[r][c] === 2) whiteMarbles.push({r, c});
+                }
+            }
+
+            // Find all valid moves for AI (moving white marble to adjacent empty spot)
+            let validMoves = [];
+            whiteMarbles.forEach(m => {
+                let candidates = [
+                    {r: m.r, c: m.c - 1}, {r: m.r, c: m.c + 1},
+                    {r: m.r - 1, c: m.c}, {r: m.r - 1, c: m.c + 1},
+                    {r: m.r + 1, c: m.c - 1}, {r: m.r + 1, c: m.c}
+                ];
+                candidates.forEach(cand => {
+                    if (cand.r >= 0 && cand.r < board.length && cand.c >= 0 && cand.c < board[cand.r].length) {
+                        if (board[cand.r][cand.c] === 0) {
+                            validMoves.push({from: m, to: cand});
+                        }
+                    }
+                });
+            });
+
+            if (validMoves.length > 0) {
+                let move = validMoves[Math.floor(Math.random() * validMoves.length)];
+                board[move.from.r][move.from.c] = 0;
+                board[move.to.r][move.to.c] = 2;
+                playSound('move');
+            }
+
+            currentPlayer = 1;
+            updateStatus();
+            renderBoard();
+            checkWin();
+        }
+
+        function checkWin() {
+            if (capturedBlack >= 6) {
+                isGameActive = false;
+                playSound('win');
+                document.getElementById('modal-title').textContent = "White Wins!";
+                document.getElementById('modal-message').textContent = "White successfully pushed 6 Black marbles off the board!";
+                resultModal.classList.remove('hidden');
+            } else if (capturedWhite >= 6) {
+                isGameActive = false;
+                playSound('win');
+                document.getElementById('modal-title').textContent = "You Win!";
+                document.getElementById('modal-message').textContent = "Brilliant tactics! You pushed 6 White marbles off the board!";
+                resultModal.classList.remove('hidden');
+            }
+        }
+
+        function closeModalAndReset(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        window.addEventListener('resize', () => {
+            renderBoard();
+        });
+
+        resetGame();
+    </script>
+</body>
+</html>

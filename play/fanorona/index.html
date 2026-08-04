@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Fanorona - Tabspace Playables</title>
+    <meta name="description" content="Play classic Fanorona online for free on Tabspace Playables. Approach and withdraw your opponent's pieces to claim victory on desktop and mobile.">
+    <meta name="keywords" content="Fanorona online, Malagasy board game, play fanorona free, board games online, Tabspace Playables, strategy board game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/fanorona">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Fanorona - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Fanorona board game. Capture opposing pieces by approach or withdrawal and win the match!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/fanorona">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Fanorona</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Fanorona</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Your turn (Orange Pieces)</p>
+        </div>
+
+        <!-- Difficulty Controls -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+            <button type="button" onpointerdown="setDifficulty('easy')" id="btn-easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy</button>
+            <button type="button" onpointerdown="setDifficulty('medium')" id="btn-medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Medium</button>
+            <button type="button" onpointerdown="setDifficulty('hard')" id="btn-hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Hard</button>
+        </div>
+
+        <!-- Fanorona Board Grid (9x5 intersections) -->
+        <div class="card-section p-4 bg-zinc-900/95 w-full max-w-[540px] aspect-[9/5] flex items-center justify-center relative">
+            <canvas id="fanorona-canvas" class="w-full h-full cursor-pointer touch-none"></canvas>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-2">
+            <button type="button" onpointerdown="resetGame()" class="cta-btn-green px-6 py-2 text-sm">New Game</button>
+            <button type="button" onpointerdown="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Game concluded.</p>
+                <div>
+                    <button type="button" onpointerdown="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        // Fanorona board: 5 rows by 9 columns intersections
+        // 'r' = orange piece, 'b' = black piece, '' = empty
+        let board = [];
+        let turn = 'r'; // 'r' for player, 'b' for AI
+        let selectedIntersection = null;
+        let validMoves = [];
+        let isGameActive = true;
+        let difficulty = 'easy';
+        let isAiTurn = false;
+
+        const canvas = document.getElementById('fanorona-canvas');
+        const ctx = canvas.getContext('2d');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        const statusDisplay = document.getElementById('game-status');
+
+        const COLS = 9;
+        const ROWS = 5;
+
+        function setDifficulty(level) {
+            playSound('click');
+            difficulty = level;
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === level) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all";
+                }
+            });
+            resetGame();
+        }
+
+        function resetGame() {
+            playSound('click');
+            board = Array(ROWS).fill(null).map(() => Array(COLS).fill(''));
+            
+            // Standard Fanorona setup:
+            // Rows 0 and 1: alternating black and white, row 2 mixed center
+            // Let's set rows 0, 1 to 'b', part of row 2 to 'b', rest to 'r'
+            for (let c = 0; c < COLS; c++) {
+                board[0][c] = 'b';
+                board[1][c] = 'b';
+                board[3][c] = 'r';
+                board[4][c] = 'r';
+            }
+            // Row 2: alternating pieces, center point (col 4) is empty
+            for (let c = 0; c < COLS; c++) {
+                if (c === 4) {
+                    board[2][c] = '';
+                } else if (c % 2 === 0) {
+                    board[2][c] = 'b'; // even columns black
+                } else {
+                    board[2][c] = 'r'; // odd columns orange
+                }
+            }
+
+            turn = 'r';
+            selectedIntersection = null;
+            validMoves = [];
+            isGameActive = true;
+            isAiTurn = false;
+            statusDisplay.textContent = "Your turn (Orange Pieces)";
+            resizeCanvas();
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            renderBoard();
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        function getLayoutMetrics() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            const paddingX = width * 0.08;
+            const paddingY = height * 0.12;
+            const boardWidth = width - paddingX * 2;
+            const boardHeight = height - paddingY * 2;
+            const dx = boardWidth / (COLS - 1);
+            const dy = boardHeight / (ROWS - 1);
+            return { paddingX, paddingY, dx, dy };
+        }
+
+        function renderBoard() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, width, height);
+
+            const { paddingX, paddingY, dx, dy } = getLayoutMetrics();
+
+            // Draw grid lines
+            ctx.strokeStyle = '#52525b';
+            ctx.lineWidth = 2;
+
+            // Orthogonal lines
+            for (let r = 0; r < ROWS; r++) {
+                ctx.beginPath();
+                ctx.moveTo(paddingX, paddingY + r * dy);
+                ctx.lineTo(paddingX + (COLS - 1) * dx, paddingY + r * dy);
+                ctx.stroke();
+            }
+            for (let c = 0; c < COLS; c++) {
+                ctx.beginPath();
+                ctx.moveTo(paddingX + c * dx, paddingY);
+                ctx.lineTo(paddingX + c * dx, paddingY + (ROWS - 1) * dy);
+                ctx.stroke();
+            }
+
+            // Diagonal lines (Fanorona specific diagonals)
+            for (let r = 0; r < ROWS - 1; r++) {
+                for (let c = 0; c < COLS - 1; c++) {
+                    // Diagonals on all squares if both (r+c) is even or center intersections have full diagonals
+                    // Standard Fanorona has diagonals running both ways on all square cells
+                    ctx.beginPath();
+                    ctx.moveTo(paddingX + c * dx, paddingY + r * dy);
+                    ctx.lineTo(paddingX + (c + 1) * dx, paddingY + (r + 1) * dy);
+                    ctx.stroke();
+
+                    ctx.beginPath();
+                    ctx.moveTo(paddingX + (c + 1) * dx, paddingY + r * dy);
+                    ctx.lineTo(paddingX + c * dx, paddingY + (r + 1) * dy);
+                    ctx.stroke();
+                }
+            }
+
+            // Draw valid move highlights
+            validMoves.forEach(m => {
+                const cx = paddingX + m.c * dx;
+                const cy = paddingY + m.r * dy;
+                ctx.fillStyle = 'rgba(34, 197, 94, 0.5)';
+                ctx.beginPath();
+                ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            // Draw pieces and nodes
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cx = paddingX + c * dx;
+                    const cy = paddingY + r * dy;
+
+                    // Selection highlight
+                    if (selectedIntersection && selectedIntersection.r === r && selectedIntersection.c === c) {
+                        ctx.strokeStyle = '#22c55e';
+                        ctx.lineWidth = 3;
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 18, 0, Math.PI * 2);
+                        ctx.stroke();
+                    }
+
+                    const piece = board[r][c];
+                    if (piece !== '') {
+                        ctx.save();
+                        ctx.shadowColor = 'rgba(0, 0, 0, 0.5)';
+                        ctx.shadowBlur = 6;
+                        ctx.shadowOffsetY = 3;
+
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 14, 0, Math.PI * 2);
+
+                        if (piece === 'r') {
+                            const grad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, 14);
+                            grad.addColorStop(0, '#ff9e3b');
+                            grad.addColorStop(1, '#ff6D00');
+                            ctx.fillStyle = grad;
+                            ctx.fill();
+                            ctx.lineWidth = 1;
+                            ctx.strokeStyle = '#9a3412';
+                            ctx.stroke();
+                        } else {
+                            const grad = ctx.createRadialGradient(cx - 4, cy - 4, 2, cx, cy, 14);
+                            grad.addColorStop(0, '#52525b');
+                            grad.addColorStop(1, '#09090b');
+                            ctx.fillStyle = grad;
+                            ctx.fill();
+                            ctx.lineWidth = 1;
+                            ctx.strokeStyle = '#27272a';
+                            ctx.stroke();
+                        }
+                        ctx.restore();
+                    } else {
+                        // Small intersection dot
+                        ctx.fillStyle = '#71717a';
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, 3, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+            }
+        }
+
+        // Get board intersection from click coordinates
+        canvas.addEventListener('pointerdown', (e) => {
+            e.preventDefault();
+            if (!isGameActive || isAiTurn || turn !== 'r') return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const { paddingX, paddingY, dx, dy } = getLayoutMetrics();
+
+            // Find closest intersection
+            let closest = null;
+            let minDist = 25; // threshold radius in pixels
+
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    const cx = paddingX + c * dx;
+                    const cy = paddingY + r * dy;
+                    const dist = Math.hypot(x - cx, y - cy);
+                    if (dist < minDist) {
+                        minDist = dist;
+                        closest = { r, c };
+                    }
+                }
+            }
+
+            if (closest) {
+                handleIntersectionClick(closest.r, closest.c);
+            }
+        });
+
+        function getValidMoves(r, c, currentBoard) {
+            const piece = currentBoard[r][c];
+            if (piece === '') return [];
+            const moves = [];
+
+            // Directions on Fanorona grid: orthogonal + diagonal if on a diagonal node
+            // A node is on a diagonal if (r + c) % 2 === 0
+            const isDiagonalNode = (r + c) % 2 === 0;
+            const dirs = [
+                {dr: -1, dc: 0}, {dr: 1, dc: 0}, {dr: 0, dc: -1}, {dr: 0, dc: 1}
+            ];
+            if (isDiagonalNode) {
+                dirs.push({dr: -1, dc: -1}, {dr: -1, dc: 1}, {dr: 1, dc: -1}, {dr: 1, dc: 1});
+            }
+
+            for (let d of dirs) {
+                const nr = r + d.dr;
+                const nc = c + d.dc;
+                if (nr >= 0 && nr < ROWS && nc >= 0 && nc < COLS && currentBoard[nr][nc] === '') {
+                    // Check captures: approach or withdrawal along direction d
+                    const captures = getCapturesForMove(r, c, nr, nc, d, currentBoard, piece);
+                    moves.push({r: nr, c: nc, captures: captures});
+                }
+            }
+            return moves;
+        }
+
+        function getCapturesForMove(fromR, fromC, toR, toC, dir, currentBoard, piece) {
+            const opponent = piece === 'r' ? 'b' : 'r';
+            let captures = [];
+
+            // 1. Approach capture: moving closer to opponent line in direction of movement
+            let checkR = toR + dir.dr;
+            let checkC = toC + dir.dc;
+            let lineOpponents = [];
+            while (checkR >= 0 && checkR < ROWS && checkC >= 0 && checkC < COLS) {
+                if (currentBoard[checkR][checkC] === opponent) {
+                    lineOpponents.push({r: checkR, c: checkC});
+                    checkR += dir.dr;
+                    checkC += dir.dc;
+                } else {
+                    break;
+                }
+            }
+            if (lineOpponents.length > 0) {
+                captures.push({type: 'approach', pieces: lineOpponents});
+            }
+
+            // 2. Withdrawal capture: moving away from opponent line opposite to movement
+            checkR = fromR - dir.dr;
+            checkC = fromC - dir.dc;
+            let withdrawOpponents = [];
+            while (checkR >= 0 && checkR < ROWS && checkC >= 0 && checkC < COLS) {
+                if (currentBoard[checkR][checkC] === opponent) {
+                    withdrawOpponents.push({r: checkR, c: checkC});
+                    checkR -= dir.dr;
+                    checkC -= dir.dc;
+                } else {
+                    break;
+                }
+            }
+            if (withdrawOpponents.length > 0) {
+                captures.push({type: 'withdrawal', pieces: withdrawOpponents});
+            }
+
+            return captures;
+        }
+
+        function handleIntersectionClick(r, c) {
+            const p = board[r][c];
+
+            if (selectedIntersection === null) {
+                if (p === 'r') {
+                    selectedIntersection = {r, c};
+                    validMoves = getValidMoves(r, c, board);
+                    playSound('click');
+                    renderBoard();
+                }
+            } else {
+                if (p === 'r') {
+                    selectedIntersection = {r, c};
+                    validMoves = getValidMoves(r, c, board);
+                    playSound('click');
+                    renderBoard();
+                    return;
+                }
+
+                const move = validMoves.find(m => m.r === r && m.c === c);
+                if (move) {
+                    executeMove(selectedIntersection.r, selectedIntersection.c, move);
+                    selectedIntersection = null;
+                    validMoves = [];
+                    renderBoard();
+
+                    if (checkGameOver()) return;
+
+                    turn = 'b';
+                    isAiTurn = true;
+                    statusDisplay.textContent = "Computer is thinking...";
+                    setTimeout(aiMove, 600);
+                } else {
+                    selectedIntersection = null;
+                    validMoves = [];
+                    renderBoard();
+                }
+            }
+        }
+
+        function executeMove(fromR, fromC, move) {
+            playSound('click');
+            const piece = board[fromR][fromC];
+            board[fromR][fromC] = '';
+            board[move.r][move.c] = piece;
+
+            // Execute captures (pick best capture type if both exist, or combine/take approach)
+            if (move.captures && move.captures.length > 0) {
+                // Prefer approach or take all associated line captures
+                const cap = move.captures.find(c => c.type === 'approach') || move.captures[0];
+                cap.pieces.forEach(cp => {
+                    board[cp.r][cp.c] = '';
+                });
+            }
+        }
+
+        function aiMove() {
+            if (!isGameActive) return;
+
+            let allMoves = [];
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (board[r][c] === 'b') {
+                        let mvs = getValidMoves(r, c, board);
+                        mvs.forEach(m => {
+                            let capCount = 0;
+                            m.captures.forEach(cp => capCount += cp.pieces.length);
+                            allMoves.push({fromR: r, fromC: c, move: m, capCount: capCount});
+                        });
+                    }
+                }
+            }
+
+            if (allMoves.length === 0) {
+                endGame('r');
+                return;
+            }
+
+            let chosen;
+            if (difficulty !== 'easy') {
+                allMoves.sort((a, b) => b.capCount - a.capCount);
+                const maxCaps = allMoves[0].capCount;
+                const bestMoves = allMoves.filter(m => m.capCount === maxCaps);
+                chosen = bestMoves[Math.floor(Math.random() * bestMoves.length)];
+            } else {
+                chosen = allMoves[Math.floor(Math.random() * allMoves.length)];
+            }
+
+            // Execute AI move
+            const piece = board[chosen.fromR][chosen.fromC];
+            board[chosen.fromR][chosen.fromC] = '';
+            board[chosen.move.r][chosen.move.c] = piece;
+            if (chosen.move.captures && chosen.move.captures.length > 0) {
+                const cap = chosen.move.captures.find(c => c.type === 'approach') || chosen.move.captures[0];
+                cap.pieces.forEach(cp => {
+                    board[cp.r][cp.c] = '';
+                });
+            }
+
+            playSound('click');
+            renderBoard();
+
+            if (checkGameOver()) return;
+
+            turn = 'r';
+            isAiTurn = false;
+            statusDisplay.textContent = "Your turn (Orange Pieces)";
+        }
+
+        function checkGameOver() {
+            let orangeCount = 0, blackCount = 0;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    if (board[r][c] === 'r') orangeCount++;
+                    if (board[r][c] === 'b') blackCount++;
+                }
+            }
+
+            if (orangeCount === 0) {
+                endGame('b');
+                return true;
+            }
+            if (blackCount === 0) {
+                endGame('r');
+                return true;
+            }
+            return false;
+        }
+
+        function endGame(winner) {
+            isGameActive = false;
+            if (winner === 'r') {
+                modalTitle.textContent = "You Win!";
+                modalMessage.textContent = "Great job outmaneuvering the computer!";
+                playSound('win');
+            } else {
+                modalTitle.textContent = "Computer Wins!";
+                modalMessage.textContent = "Better luck next time! Try an easier difficulty.";
+                playSound('lose');
+            }
+            resultModal.classList.remove('hidden');
+            statusDisplay.textContent = "Game Over";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

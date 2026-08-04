@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Durak - Tabspace Playables</title>
+    <meta name="description" content="Play classic Durak card game online for free on Tabspace Playables. Attack and defend with trump suits on desktop and mobile.">
+    <meta name="keywords" content="Durak online, card game online, play durak free, traditional card games, Tabspace Playables, russian card game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/durak">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Durak - Tabspace Playables">
+    <meta property="og:description" content="Challenge the computer in classic Durak! Attack, defend with trumps, and avoid being left as the fool!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/durak">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .playing-card {
+            width: 64px;
+            height: 92px;
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 6px;
+            font-size: 0.85rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+            cursor: pointer;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .playing-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 6px 12px rgba(34, 197, 94, 0.4);
+        }
+        .playing-card.red {
+            color: #dc2626;
+        }
+        .playing-card.black {
+            color: #18181b;
+        }
+        .playing-card.selected {
+            transform: translateY(-10px);
+            border: 2px solid var(--accent-green);
+            box-shadow: 0 0 14px rgba(34, 197, 94, 0.6);
+        }
+        .card-pile-slot {
+            width: 64px;
+            height: 92px;
+            border: 2px dashed #52525b;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #71717a;
+            font-size: 0.75rem;
+            text-align: center;
+            padding: 4px;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Durak</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Durak</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Attack or defend against the computer. Trump suit wins!</p>
+        </div>
+
+        <!-- Info & Stats -->
+        <div class="flex items-center gap-6 bg-zinc-900/60 px-5 py-2.5 rounded-xl border border-zinc-800 text-xs md:text-sm">
+            <div>Computer Cards: <strong id="computer-card-count" class="text-white">6</strong></div>
+            <div class="h-4 w-[1px] bg-zinc-700"></div>
+            <div>Deck Left: <strong id="deck-count" class="text-white">24</strong></div>
+            <div class="h-4 w-[1px] bg-zinc-700"></div>
+            <div>Trump: <strong id="trump-display" class="text-brand-orange">♥</strong></div>
+        </div>
+
+        <!-- Game Board Container -->
+        <div class="card-section p-5 bg-zinc-900/90 border border-zinc-700 shadow-xl relative overflow-hidden flex flex-col items-center justify-center w-full max-w-[500px] space-y-4">
+            
+            <!-- Table Arena (Battlefield) -->
+            <div class="w-full space-y-1">
+                <div class="text-[11px] text-zinc-400 flex justify-between items-center">
+                    <span>Battlefield:</span>
+                    <button type="button" id="action-btn" onpointerdown="handleTableAction()" class="cta-btn-green px-4 py-1 text-xs" style="display:none;">Take Cards</button>
+                </div>
+                <div id="battlefield" class="flex flex-wrap gap-3 min-h-[110px] bg-zinc-950/70 p-3 rounded-xl border border-zinc-800 items-center justify-center">
+                    <span class="text-zinc-600 text-xs">Table is clean</span>
+                </div>
+            </div>
+
+            <!-- Player Hand Area -->
+            <div class="w-full space-y-1">
+                <div class="text-[11px] text-zinc-400">Your Hand:</div>
+                <div id="player-hand" class="flex flex-wrap gap-2 min-h-[105px] bg-zinc-950/80 p-3 rounded-xl border border-zinc-800 items-center justify-center">
+                    <!-- Dynamically populated player cards -->
+                </div>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="flex gap-2 justify-center pt-2 w-full border-t border-zinc-800">
+                <button type="button" onpointerdown="resetGame()" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm">New Game</button>
+                <button type="button" onpointerdown="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Game concluded.</p>
+                <div>
+                    <button type="button" onpointerdown="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'deal') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(500, now + 0.08);
+                gainNode.gain.setValueAtTime(0.12, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) {
+                    elem.requestFullscreen();
+                } else if (elem.webkitRequestFullscreen) {
+                    elem.webkitRequestFullscreen();
+                } else if (elem.msRequestFullscreen) {
+                    elem.msRequestFullscreen();
+                }
+            } else {
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const suits = ['♥', '♦', '♣', '♠'];
+        const ranks = ['6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+        const rankValues = { '6':6, '7':7, '8':8, '9':9, '10':10, 'J':11, 'Q':12, 'K':13, 'A':14 };
+
+        let deck = [];
+        let playerHand = [];
+        let computerHand = [];
+        let trumpCard = null;
+        let tablePairs = []; // Array of { attack: card, defense: card or null }
+        let role = 'attacker'; // 'attacker' or 'defender'
+        let isGameActive = true;
+        let selectedAttackCardIdx = null;
+
+        const playerHandEl = document.getElementById('player-hand');
+        const battlefieldEl = document.getElementById('battlefield');
+        const computerCardCountEl = document.getElementById('computer-card-count');
+        const deckCountEl = document.getElementById('deck-count');
+        const trumpDisplay = document.getElementById('trump-display');
+        const gameStatus = document.getElementById('game-status');
+        const actionBtn = document.getElementById('action-btn');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function createDeck() {
+            let d = [];
+            suits.forEach(s => {
+                ranks.forEach(r => {
+                    d.push({ suit: s, rank: r, val: rankValues[r] });
+                });
+            });
+            for (let i = d.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [d[i], d[j]] = [d[j], d[i]];
+            }
+            return d;
+        }
+
+        function resetGame() {
+            playSound('click');
+            deck = createDeck();
+            playerHand = [];
+            computerHand = [];
+            tablePairs = [];
+            selectedAttackCardIdx = null;
+            isGameActive = true;
+            resultModal.classList.add('hidden');
+
+            trumpCard = deck.pop();
+            deck.unshift(trumpCard);
+
+            for (let i = 0; i < 6; i++) {
+                playerHand.push(deck.pop());
+                computerHand.push(deck.pop());
+            }
+
+            trumpDisplay.textContent = trumpCard.suit;
+            role = 'attacker';
+            gameStatus.textContent = "Your turn to attack! Choose a card.";
+            actionBtn.style.display = 'inline-block';
+            actionBtn.textContent = "Done / Beat";
+            renderBoard();
+        }
+
+        function renderBoard() {
+            computerCardCountEl.textContent = computerHand.length;
+            deckCountEl.textContent = deck.length;
+            trumpDisplay.textContent = trumpCard.suit;
+
+            // Render Battlefield
+            battlefieldEl.innerHTML = '';
+            if (tablePairs.length === 0) {
+                battlefieldEl.innerHTML = '<span class="text-zinc-600 text-xs">Table is clean</span>';
+            } else {
+                tablePairs.forEach(pair => {
+                    let pairWrapper = document.createElement('div');
+                    pairWrapper.className = "flex gap-1 items-center bg-zinc-900 p-1.5 rounded-lg border border-zinc-800";
+                    pairWrapper.appendChild(createCardElement(pair.attack));
+                    if (pair.defense) {
+                        pairWrapper.appendChild(createCardElement(pair.defense));
+                    } else {
+                        let emptySlot = document.createElement('div');
+                        emptySlot.className = "card-pile-slot text-[10px]";
+                        emptySlot.textContent = "Defend";
+                        pairWrapper.appendChild(emptySlot);
+                    }
+                    battlefieldEl.appendChild(pairWrapper);
+                });
+            }
+
+            // Render Player Hand
+            playerHandEl.innerHTML = '';
+            playerHand.forEach((card, idx) => {
+                let cEl = createCardElement(card);
+                if (selectedAttackCardIdx === idx) {
+                    cEl.classList.add('selected');
+                }
+                cEl.onpointerdown = (e) => {
+                    e.preventDefault();
+                    handleCardClick(idx);
+                };
+                playerHandEl.appendChild(cEl);
+            });
+        }
+
+        function createCardElement(card) {
+            let el = document.createElement('div');
+            let isRed = (card.suit === '♥' || card.suit === '♦');
+            el.className = `playing-card ${isRed ? 'red' : 'black'}`;
+            el.innerHTML = `
+                <div class="text-left font-bold">${card.rank}${card.suit}</div>
+                <div class="text-center text-xl">${card.suit}</div>
+                <div class="text-right font-bold">${card.rank}${card.suit}</div>
+            `;
+            return el;
+        }
+
+        function handleCardClick(idx) {
+            playSound('click');
+            let card = playerHand[idx];
+
+            if (role === 'attacker') {
+                // If table is empty, any card can attack
+                if (tablePairs.length === 0) {
+                    playerHand.splice(idx, 1);
+                    tablePairs.push({ attack: card, defense: null });
+                    playSound('deal');
+                    role = 'defender';
+                    gameStatus.textContent = "Computer is defending...";
+                    renderBoard();
+                    setTimeout(computerDefend, 800);
+                } else {
+                    // Check if rank matches cards already on table
+                    let ranksOnTable = [];
+                    tablePairs.forEach(p => {
+                        ranksOnTable.push(p.attack.rank);
+                        if (p.defense) ranksOnTable.push(p.defense.rank);
+                    });
+
+                    if (ranksOnTable.includes(card.rank)) {
+                        playerHand.splice(idx, 1);
+                        tablePairs.push({ attack: card, defense: null });
+                        playSound('deal');
+                        role = 'defender';
+                        gameStatus.textContent = "Computer is defending...";
+                        renderBoard();
+                        setTimeout(computerDefend, 800);
+                    } else {
+                        playSound('lose');
+                        gameStatus.textContent = "Attack card must match rank of cards on table!";
+                    }
+                }
+            } else if (role === 'defender') {
+                // Find first undefended pair
+                let undefendedIdx = tablePairs.findIndex(p => p.defense === null);
+                if (undefendedIdx !== -1) {
+                    let attackCard = tablePairs[undefendedIdx].attack;
+                    if (isValidDefense(card, attackCard, trumpCard.suit)) {
+                        playerHand.splice(idx, 1);
+                        tablePairs[undefendedIdx].defense = card;
+                        playSound('deal');
+                        role = 'attacker';
+                        gameStatus.textContent = "Defense successful! Your turn to attack or finish.";
+                        renderBoard();
+
+                        // Check if all defended
+                        if (tablePairs.every(p => p.defense !== null)) {
+                            gameStatus.textContent = "All attacks beaten! Click Done to clear table.";
+                            actionBtn.textContent = "Clear Table";
+                        }
+                    } else {
+                        playSound('lose');
+                        gameStatus.textContent = "Invalid defense! Beat higher rank or use trump.";
+                    }
+                }
+            }
+        }
+
+        function isValidDefense(defCard, attCard, trumpSuit) {
+            if (defCard.suit === attCard.suit) {
+                return defCard.val > attCard.val;
+            }
+            if (defCard.suit === trumpSuit && attCard.suit !== trumpSuit) {
+                return true;
+            }
+            return false;
+        }
+
+        function handleTableAction() {
+            if (!isGameActive) return;
+            playSound('click');
+
+            if (role === 'defender') {
+                // Player takes all cards from table
+                tablePairs.forEach(p => {
+                    playerHand.push(p.attack);
+                    if (p.defense) playerHand.push(p.defense);
+                });
+                tablePairs = [];
+                gameStatus.textContent = "You took the cards! Computer attacks again.";
+                refillHands();
+                renderBoard();
+                setTimeout(computerAttackFirst, 1000);
+            } else {
+                // Clear table successfully
+                tablePairs = [];
+                gameStatus.textContent = "Table cleared! New round.";
+                refillHands();
+                role = 'attacker';
+                renderBoard();
+                if (computerHand.length === 0 && deck.length === 0) {
+                    endGame('computer'); // Computer ran out of cards first -> Computer wins / You are Durak
+                } else if (playerHand.length === 0 && deck.length === 0) {
+                    endGame('player');
+                }
+            }
+        }
+
+        function computerDefend() {
+            if (!isGameActive) return;
+            let undefendedIdx = tablePairs.findIndex(p => p.defense === null);
+            if (undefendedIdx === -1) return;
+
+            let attackCard = tablePairs[undefendedIdx].attack;
+            let validDefIdx = computerHand.findIndex(c => isValidDefense(c, attackCard, trumpCard.suit));
+
+            if (validDefIdx !== -1) {
+                let defCard = computerHand.splice(validDefIdx, 1)[0];
+                tablePairs[undefendedIdx].defense = defCard;
+                playSound('deal');
+                role = 'attacker';
+                gameStatus.textContent = "Computer defended! Your turn to attack.";
+                renderBoard();
+            } else {
+                // Computer takes cards
+                tablePairs.forEach(p => {
+                    computerHand.push(p.attack);
+                    if (p.defense) computerHand.push(p.defense);
+                });
+                tablePairs = [];
+                playSound('lose');
+                gameStatus.textContent = "Computer couldn't defend and took cards! Your turn to attack.";
+                refillHands();
+                role = 'attacker';
+                renderBoard();
+            }
+        }
+
+        function computerAttackFirst() {
+            if (!isGameActive || computerHand.length === 0) return;
+            let card = computerHand.pop();
+            tablePairs.push({ attack: card, defense: null });
+            playSound('deal');
+            role = 'defender';
+            actionBtn.textContent = "Take Cards";
+            gameStatus.textContent = "Computer attacked! Choose a defending card or click Take Cards.";
+            renderBoard();
+        }
+
+        function refillHands() {
+            while (playerHand.length < 6 && deck.length > 0) {
+                playerHand.push(deck.pop());
+            }
+            while (computerHand.length < 6 && deck.length > 0) {
+                computerHand.push(deck.pop());
+            }
+        }
+
+        function endGame(winner) {
+            isGameActive = false;
+            if (winner === 'player') {
+                modalTitle.textContent = "You Win!";
+                modalMessage.textContent = "Fantastic! You emptied your hand and avoided being the Durak!";
+                playSound('win');
+            } else {
+                modalTitle.textContent = "You are the Durak!";
+                modalMessage.textContent = "The computer emptied its hand first. Better luck next time!";
+                playSound('lose');
+            }
+            resultModal.classList.remove('hidden');
+            gameStatus.textContent = "Game Over";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

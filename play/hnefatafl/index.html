@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Hnefatafl - Tabspace Playables</title>
+    <meta name="description" content="Play classic Viking Chess (Hnefatafl) online for free on Tabspace Playables. Defend the king or capture him on desktop and mobile.">
+    <meta name="keywords" content="Hnefatafl online, Viking chess, board games online, play hnefatafl free, Tabspace Playables, strategy game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/hnefatafl">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Hnefatafl - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Viking board game Hnefatafl. Protect the king and win the match!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/hnefatafl">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Hnefatafl</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Hnefatafl (Viking Chess)</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Your turn (Defenders / White)</p>
+        </div>
+
+        <!-- Difficulty Controls -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+            <button type="button" onclick="setDifficulty('easy')" id="btn-easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy</button>
+            <button type="button" onclick="setDifficulty('medium')" id="btn-medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Medium</button>
+            <button type="button" onclick="setDifficulty('hard')" id="btn-hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Hard</button>
+        </div>
+
+        <!-- Board Container -->
+        <div class="card-section p-3 bg-zinc-900/95 w-full max-w-[420px] aspect-square flex items-center justify-center relative">
+            <canvas id="tafl-canvas" class="w-full h-full cursor-pointer touch-none"></canvas>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-2">
+            <button type="button" onclick="resetGame()" class="cta-btn-green px-6 py-2 text-sm">New Game</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Game concluded.</p>
+                <div>
+                    <button type="button" onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const BOARD_SIZE = 11; // 11x11 Tafl Board
+        let board = [];
+        let turn = 'defender'; // 'defender' (white/player) or 'attacker' (black/AI)
+        let selectedPiece = null;
+        let validMoves = [];
+        let isGameActive = true;
+        let difficulty = 'easy';
+        let isAiTurn = false;
+
+        const canvas = document.getElementById('tafl-canvas');
+        const ctx = canvas.getContext('2d');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+        let statusDisplay = document.getElementById('game-status');
+
+        function setDifficulty(level) {
+            playSound('click');
+            difficulty = level;
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === level) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all";
+                }
+            });
+            resetGame();
+        }
+
+        function resetGame() {
+            playSound('click');
+            board = Array(BOARD_SIZE).fill(null).map(() => Array(BOARD_SIZE).fill(null));
+            
+            // Setup Attackers (Black) - 24 pieces
+            const attackerPositions = [
+                [0,3],[0,4],[0,5],[0,6],[0,7],
+                [1,5],
+                [3,0],[4,0],[5,0],[6,0],[7,0],
+                [5,1],
+                [10,3],[10,4],[10,5],[10,6],[10,7],
+                [9,5],
+                [3,10],[4,10],[5,10],[6,10],[7,10],
+                [5,9]
+            ];
+            attackerPositions.forEach(([r, c]) => { board[r][c] = 'attacker'; });
+
+            // Setup Defenders (White) - 12 pieces
+            const defenderPositions = [
+                [3,5],[4,4],[4,5],[4,6],[5,3],[5,4],[5,6],[5,7],[6,4],[6,5],[6,6],[7,5]
+            ];
+            defenderPositions.forEach(([r, c]) => { board[r][c] = 'defender'; });
+
+            // Setup King (White King) at center (5,5)
+            board[5][5] = 'king';
+
+            turn = 'defender';
+            selectedPiece = null;
+            validMoves = [];
+            isGameActive = true;
+            isAiTurn = false;
+            statusDisplay.textContent = "Your turn (Defenders / White)";
+            resizeCanvas();
+        }
+
+        function resizeCanvas() {
+            const rect = canvas.getBoundingClientRect();
+            canvas.width = rect.width * window.devicePixelRatio;
+            canvas.height = rect.height * window.devicePixelRatio;
+            ctx.scale(window.devicePixelRatio, window.devicePixelRatio);
+            renderBoard();
+        }
+
+        window.addEventListener('resize', () => {
+            resizeCanvas();
+        });
+
+        function renderBoard() {
+            const width = canvas.width / window.devicePixelRatio;
+            const height = canvas.height / window.devicePixelRatio;
+            ctx.clearRect(0, 0, width, height);
+
+            const cellSize = width / BOARD_SIZE;
+
+            // Wood-like background
+            ctx.fillStyle = '#c29b61';
+            ctx.fillRect(0, 0, width, height);
+
+            // Draw special squares: Throne (5,5) and Corners (0,0), (0,10), (10,0), (10,10)
+            const corners = [[0,0], [0,10], [10,0], [10,10]];
+            corners.forEach(([r, c]) => {
+                ctx.fillStyle = '#78350f';
+                ctx.fillRect(c * cellSize, r * cellSize, cellSize, cellSize);
+            });
+
+            // Throne
+            ctx.fillStyle = '#78350f';
+            ctx.fillRect(5 * cellSize, 5 * cellSize, cellSize, cellSize);
+
+            // Grid lines
+            ctx.strokeStyle = '#5a3d1e';
+            ctx.lineWidth = 1;
+            for (let i = 0; i <= BOARD_SIZE; i++) {
+                let pos = i * cellSize;
+                ctx.beginPath();
+                ctx.moveTo(pos, 0);
+                ctx.lineTo(pos, height);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(0, pos);
+                ctx.lineTo(width, pos);
+                ctx.stroke();
+            }
+
+            // Highlight valid moves
+            validMoves.forEach(m => {
+                ctx.fillStyle = 'rgba(34, 197, 94, 0.4)';
+                ctx.fillRect(m.c * cellSize, m.r * cellSize, cellSize, cellSize);
+            });
+
+            // Highlight selected piece
+            if (selectedPiece) {
+                ctx.strokeStyle = '#ff6D00';
+                ctx.lineWidth = 3;
+                ctx.strokeRect(selectedPiece.c * cellSize, selectedPiece.r * cellSize, cellSize, cellSize);
+            }
+
+            // Draw pieces
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    let piece = board[r][c];
+                    if (piece) {
+                        let cx = (c + 0.5) * cellSize;
+                        let cy = (r + 0.5) * cellSize;
+                        let radius = cellSize * 0.38;
+
+                        ctx.beginPath();
+                        ctx.arc(cx, cy, radius, 0, Math.PI * 2);
+
+                        if (piece === 'attacker') {
+                            ctx.fillStyle = '#18181b';
+                            ctx.fill();
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = '#3f3f46';
+                            ctx.stroke();
+                        } else if (piece === 'defender') {
+                            ctx.fillStyle = '#f4f4f5';
+                            ctx.fill();
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = '#d4d4d8';
+                            ctx.stroke();
+                        } else if (piece === 'king') {
+                            ctx.fillStyle = '#fbbf24';
+                            ctx.fill();
+                            ctx.lineWidth = 2;
+                            ctx.strokeStyle = '#d97706';
+                            ctx.stroke();
+                            // Draw crown symbol on king
+                            ctx.fillStyle = '#78350f';
+                            ctx.font = `${cellSize * 0.4}px sans-serif`;
+                            ctx.textAlign = 'center';
+                            ctx.textBaseline = 'middle';
+                            ctx.fillText('👑', cx, cy);
+                        }
+                    }
+                }
+            }
+        }
+
+        canvas.addEventListener('click', (e) => {
+            if (!isGameActive || isAiTurn || turn !== 'defender') return;
+
+            const rect = canvas.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const cellSize = (canvas.width / window.devicePixelRatio) / BOARD_SIZE;
+
+            let c = Math.floor(x / cellSize);
+            let r = Math.floor(y / cellSize);
+
+            if (r >= 0 && r < BOARD_SIZE && c >= 0 && c < BOARD_SIZE) {
+                let piece = board[r][c];
+
+                // If clicking own piece, select it
+                if (piece === 'defender' || piece === 'king') {
+                    selectedPiece = { r, c };
+                    validMoves = getValidMoves(r, c);
+                    playSound('click');
+                    renderBoard();
+                } else if (selectedPiece) {
+                    // Check if clicked spot is a valid move
+                    let move = validMoves.find(m => m.r === r && m.c === c);
+                    if (move) {
+                        makeMove(selectedPiece.r, selectedPiece.c, r, c);
+                    } else {
+                        selectedPiece = null;
+                        validMoves = [];
+                        renderBoard();
+                    }
+                }
+            }
+        });
+
+        function getValidMoves(r, c) {
+            let moves = [];
+            let dirs = [{r:-1,c:0}, {r:1,c:0}, {r:0,c:-1}, {r:0,c:1}];
+
+            dirs.forEach(d => {
+                let step = 1;
+                while (true) {
+                    let nr = r + d.r * step;
+                    let nc = c + d.c * step;
+                    if (nr < 0 || nr >= BOARD_SIZE || nc < 0 || nc >= BOARD_SIZE) break;
+
+                    // Obstacle check
+                    if (board[nr][nc] !== null) break;
+
+                    // Restrict corners and center throne for regular pieces
+                    let isCorner = (nr === 0 && nc === 0) || (nr === 0 && nc === 10) || (nr === 10 && nc === 0) || (nr === 10 && nc === 10);
+                    let isThrone = (nr === 5 && nc === 5);
+                    if ((isCorner || isThrone) && board[r][c] !== 'king') {
+                        // Only king can enter throne/corners, others can pass or not land depending on rules, standard tafl restricts landing on throne/corners except king.
+                        step++;
+                        continue;
+                    }
+
+                    moves.push({ r: nr, c: nc });
+                    step++;
+                }
+            });
+            return moves;
+        }
+
+        function makeMove(fromR, fromC, toR, toC) {
+            let piece = board[fromR][fromC];
+            board[fromR][fromC] = null;
+            board[toR][toC] = piece;
+
+            playSound('click');
+            selectedPiece = null;
+            validMoves = [];
+
+            // Check win conditions
+            if (piece === 'king' && (toR === 0 || toR === 10 || toC === 0 || toC === 10)) {
+                endGame('defender');
+                return;
+            }
+
+            // Capture mechanics (custody capture: sandwiching enemy between two friendly pieces or castle square)
+            checkCaptures(toR, toC, piece);
+
+            renderBoard();
+
+            if (piece === 'king' && isKingCaptured()) {
+                endGame('attacker');
+                return;
+            }
+
+            if (turn === 'defender') {
+                turn = 'attacker';
+                isAiTurn = true;
+                statusDisplay.textContent = "Computer is thinking...";
+                setTimeout(aiMove, 600);
+            } else {
+                turn = 'defender';
+                isAiTurn = false;
+                statusDisplay.textContent = "Your turn (Defenders / White)";
+            }
+        }
+
+        function checkCaptures(r, c, mover) {
+            let enemyTypes = mover === 'attacker' ? ['defender', 'king'] : ['attacker'];
+            let dirs = [{r:-1,c:0}, {r:1,c:0}, {r:0,c:-1}, {r:0,c:1}];
+
+            dirs.forEach(d => {
+                let adjR = r + d.r;
+                let adjC = c + d.c;
+                let farR = r + d.r * 2;
+                let farC = c + d.c * 2;
+
+                if (adjR >= 0 && adjR < BOARD_SIZE && adjC >= 0 && adjC < BOARD_SIZE) {
+                    let neighbor = board[adjR][adjC];
+                    if (neighbor && enemyTypes.includes(neighbor)) {
+                        if (neighbor === 'king') {
+                            // King capture requires 4 sides or 3 + throne depending on variant; here simplified to surrounded or trapped
+                            if (isKingCaptured()) {
+                                board[adjR][adjC] = null;
+                            }
+                        } else {
+                            if (farR >= 0 && farR < BOARD_SIZE && farC >= 0 && farC < BOARD_SIZE) {
+                                let farPiece = board[farR][farC];
+                                let isFarCornerOrThrone = (farR === 5 && farC === 5) || ((farR === 0 || farR === 10) && (farC === 0 || farC === 10));
+                                if ((farPiece && (farPiece === mover || farPiece === 'king')) || isFarCornerOrThrone) {
+                                    board[adjR][adjC] = null;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        function isKingCaptured() {
+            // Find king
+            let kr = -1, kc = -1;
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    if (board[r][c] === 'king') { kr = r; kc = c; }
+                }
+            }
+            if (kr === -1) return true; // King is gone
+
+            // If king is on throne, needs 4 attackers surrounding
+            if (kr === 5 && kc === 5) {
+                let attackersAround = 0;
+                let dirs = [{r:-1,c:0}, {r:1,c:0}, {r:0,c:-1}, {r:0,c:1}];
+                dirs.forEach(d => {
+                    let ar = kr + d.r, ac = kc + d.c;
+                    if (board[ar][ac] === 'attacker') attackersAround++;
+                });
+                return attackersAround === 4;
+            }
+
+            // Otherwise 2 opposite attackers
+            let dirs = [{r:-1,c:0}, {r:1,c:0}, {r:0,c:-1}, {r:0,c:1}];
+            let trappedVertically = (
+                (kr > 0 && board[kr-1][kc] === 'attacker' && kr < 10 && board[kr+1][kc] === 'attacker')
+            );
+            let trappedHorizontally = (
+                (kc > 0 && board[kr][kc-1] === 'attacker' && kc < 10 && board[kr][kc+1] === 'attacker')
+            );
+
+            return trappedVertically || trappedHorizontally;
+        }
+
+        function aiMove() {
+            if (!isGameActive) return;
+
+            // Gather all attacker pieces and their valid moves
+            let allMoves = [];
+            for (let r = 0; r < BOARD_SIZE; r++) {
+                for (let c = 0; c < BOARD_SIZE; c++) {
+                    if (board[r][c] === 'attacker') {
+                        selectedPiece = { r, c };
+                        let moves = getValidMoves(r, c);
+                        moves.forEach(m => allMoves.push({ fromR: r, fromC: c, toR: m.r, toC: m.c }));
+                    }
+                }
+            }
+            selectedPiece = null;
+
+            if (allMoves.length > 0) {
+                let chosenMove = allMoves[Math.floor(Math.random() * allMoves.length)];
+                makeMove(chosenMove.fromR, chosenMove.fromC, chosenMove.toR, chosenMove.toC);
+            } else {
+                endGame('defender'); // No moves left for attackers
+            }
+        }
+
+        function endGame(winner) {
+            isGameActive = false;
+            if (winner === 'defender') {
+                playSound('win');
+                modalTitle.textContent = "Defenders Win!";
+                modalMessage.textContent = "The King successfully escaped to safety!";
+            } else {
+                playSound('lose');
+                modalTitle.textContent = "Attackers Win!";
+                modalMessage.textContent = "The King has been captured!";
+            }
+            resultModal.classList.remove('hidden');
+            statusDisplay.textContent = "Game Over";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

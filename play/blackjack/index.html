@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Blackjack - Tabspace Playables</title>
+    <meta name="description" content="Play classic Blackjack online for free on Tabspace Playables. Test your card game skills and beat the dealer on desktop and mobile.">
+    <meta name="keywords" content="Blackjack online, 21 card game, play blackjack free, card games online, Tabspace Playables, casino strategy game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/blackjack">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Blackjack - Tabspace Playables">
+    <meta property="og:description" content="Challenge the dealer in classic Blackjack. Hit, stand, and get as close to 21 as possible without going bust!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/blackjack">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .playing-card {
+            width: 68px;
+            height: 96px;
+            background-color: #ffffff;
+            color: #09090b;
+            border-radius: 8px;
+            display: flex;
+            position: relative;
+            padding: 6px;
+            font-size: 0.95rem;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+            user-select: none;
+            -webkit-touch-callout: none;
+            border: 1px solid #d4d4d8;
+        }
+        .playing-card.red {
+            color: #dc2626;
+        }
+        .playing-card.hidden-card {
+            background: linear-gradient(135deg, #166534 0%, #14532d 100%);
+            border: 2px solid #22c55e;
+            color: transparent;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-4 md:px-6 py-3 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 md:gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-12 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-base md:text-2xl font-light">/ Blackjack</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-3 md:px-5 py-2 text-xs md:text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-3 md:px-6 py-4 md:py-8 space-y-4 md:space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <!-- Header Section with Centered Name -->
+        <div class="w-full flex flex-col items-center justify-center gap-2 md:gap-3 text-center">
+            <h1 class="text-2xl md:text-4xl tracking-tight text-white">Blackjack</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-base px-2">Beat the dealer without exceeding 21.</p>
+        </div>
+
+        <!-- Chips & Score Display -->
+        <div class="flex flex-wrap items-center justify-center gap-4 md:gap-8 bg-zinc-900/60 px-4 py-2.5 rounded-xl border border-zinc-800 text-xs md:text-sm">
+            <div class="flex items-center gap-2">
+                <span class="text-zinc-300">Chips: <strong id="chip-count" class="text-white">1000</strong></span>
+            </div>
+            <div class="h-4 w-[1px] bg-zinc-700 hidden sm:block"></div>
+            <div class="flex items-center gap-2">
+                <span class="text-zinc-300">Current Bet: <strong id="current-bet" class="text-white">50</strong></span>
+            </div>
+        </div>
+
+        <!-- Game Board Container -->
+        <div class="card-section p-4 md:p-6 bg-zinc-900/90 border border-zinc-700 shadow-xl relative overflow-hidden flex flex-col items-center justify-center w-full max-w-[560px] space-y-5">
+            
+            <!-- Dealer Section -->
+            <div class="w-full space-y-2 text-center">
+                <div class="text-xs text-zinc-400 uppercase tracking-wider">Dealer Hand (<span id="dealer-score">0</span>)</div>
+                <div id="dealer-cards" class="flex items-center justify-center gap-2 min-h-[104px]"></div>
+            </div>
+
+            <!-- Divider -->
+            <div class="w-full h-[1px] bg-zinc-800"></div>
+
+            <!-- Player Section -->
+            <div class="w-full space-y-2 text-center">
+                <div class="text-xs text-zinc-400 uppercase tracking-wider">Player Hand (<span id="player-score">0</span>)</div>
+                <div id="player-cards" class="flex items-center justify-center gap-2 min-h-[104px]"></div>
+            </div>
+
+            <!-- Game Actions -->
+            <div id="action-buttons" class="flex items-center justify-center gap-3 w-full pt-2">
+                <button onclick="hitCard()" id="hit-btn" class="btn-card playables-hover text-white px-5 py-2.5 text-xs md:text-sm font-bold cursor-pointer">Hit</button>
+                <button onclick="standTurn()" id="stand-btn" class="btn-card playables-hover text-white px-5 py-2.5 text-xs md:text-sm font-bold cursor-pointer">Stand</button>
+                <button onclick="startNewHand()" id="deal-btn" class="cta-btn-green px-6 py-2.5 text-xs md:text-sm font-bold cursor-pointer hidden">Deal Hand</button>
+            </div>
+            
+            <!-- Side-by-side Restart and Fullscreen Buttons -->
+            <div class="flex items-center justify-center gap-3 md:gap-4 pt-2 w-full border-t border-zinc-800">
+                <button onclick="resetGame(event)" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>New Game</span> 
+                </button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-6 md:p-8 max-w-md w-full mx-4 text-center space-y-4 md:space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl z-50">
+                <h2 id="modal-title" class="text-xl md:text-3xl text-white tracking-wide">Round Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-sm md:text-base">Hand completed successfully!</p>
+                <div>
+                    <button onclick="closeModalAndNextHand(event)" class="cta-btn-green px-6 md:px-8 py-2.5 md:py-3 text-sm md:text-base w-full cursor-pointer">Next Hand</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-4 md:py-6 border-t border-zinc-900 text-center px-4">
+        <p class="text-[11px] md:text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-emerald-500">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'card') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(450, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+                gainNode.gain.setValueAtTime(0.12, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const suits = ['♠', '♥', '♦', '♣'];
+        const values = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+
+        let deck = [];
+        let playerHand = [];
+        let dealerHand = [];
+        let chips = 1000;
+        let bet = 50;
+        let isPlayerTurn = true;
+        let isGameActive = true;
+
+        const dealerCardsEl = document.getElementById('dealer-cards');
+        const playerCardsEl = document.getElementById('player-cards');
+        const dealerScoreEl = document.getElementById('dealer-score');
+        const playerScoreEl = document.getElementById('player-score');
+        const chipCountEl = document.getElementById('chip-count');
+        const currentBetEl = document.getElementById('current-bet');
+        const hitBtn = document.getElementById('hit-btn');
+        const standBtn = document.getElementById('stand-btn');
+        const dealBtn = document.getElementById('deal-btn');
+        const resultModal = document.getElementById('result-modal');
+
+        function resetGame(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            chips = 1000;
+            bet = 50;
+            resultModal.classList.add('hidden');
+            startNewHand();
+        }
+
+        function createDeck() {
+            deck = [];
+            for (let s of suits) {
+                for (let v of values) {
+                    deck.push({ suit: s, val: v });
+                }
+            }
+            // Shuffle deck
+            for (let i = deck.length - 1; i > 0; i--) {
+                let j = Math.floor(Math.random() * (i + 1));
+                [deck[i], deck[j]] = [deck[j], deck[i]];
+            }
+        }
+
+        function startNewHand() {
+            playSound('click');
+            if (chips < bet) {
+                chips = 1000; // Reset chips if broke
+            }
+            chips -= bet;
+            chipCountEl.textContent = chips;
+            currentBetEl.textContent = bet;
+
+            createDeck();
+            playerHand = [deck.pop(), deck.pop()];
+            dealerHand = [deck.pop(), deck.pop()];
+
+            isPlayerTurn = true;
+            isGameActive = true;
+            resultModal.classList.add('hidden');
+
+            hitBtn.classList.remove('hidden');
+            standBtn.classList.remove('hidden');
+            dealBtn.classList.add('hidden');
+
+            renderHands(false);
+
+            // Check immediate blackjack
+            if (calculateScore(playerHand) === 21) {
+                standTurn();
+            }
+        }
+
+        function calculateScore(hand) {
+            let score = 0;
+            let aces = 0;
+            for (let card of hand) {
+                if (card.val === 'A') {
+                    aces++;
+                    score += 11;
+                } else if (['K', 'Q', 'J', '10'].includes(card.val)) {
+                    score += 10;
+                } else {
+                    score += parseInt(card.val);
+                }
+            }
+            while (score > 21 && aces > 0) {
+                score -= 10;
+                aces--;
+            }
+            return score;
+        }
+
+        function renderHands(showDealerAll) {
+            playerCardsEl.innerHTML = '';
+            playerHand.forEach(card => {
+                playerCardsEl.appendChild(createCardElement(card));
+            });
+            playerScoreEl.textContent = calculateScore(playerHand);
+
+            dealerCardsEl.innerHTML = '';
+            dealerHand.forEach((card, idx) => {
+                if (idx === 0 && !showDealerAll && isPlayerTurn) {
+                    let hidden = document.createElement('div');
+                    hidden.className = "playing-card hidden-card";
+                    dealerCardsEl.appendChild(hidden);
+                } else {
+                    dealerCardsEl.appendChild(createCardElement(card));
+                }
+            });
+
+            if (!showDealerAll && isPlayerTurn) {
+                let visibleCard = dealerHand[1];
+                let visibleVal = visibleCard.val === 'A' ? 11 : (['K', 'Q', 'J', '10'].includes(visibleCard.val) ? 10 : parseInt(visibleCard.val));
+                dealerScoreEl.textContent = visibleVal;
+            } else {
+                dealerScoreEl.textContent = calculateScore(dealerHand);
+            }
+        }
+
+        function createCardElement(card) {
+            let el = document.createElement('div');
+            let isRed = ['♥', '♦'].includes(card.suit);
+            el.className = `playing-card ${isRed ? 'red' : ''}`;
+            el.innerHTML = `
+                <div class="flex flex-col leading-none font-bold">
+                    <span>${card.val}</span>
+                    <span>${card.suit}</span>
+                </div>
+                <div class="absolute inset-0 flex items-center justify-center text-2xl font-bold">
+                    ${card.suit}
+                </div>
+                <div class="absolute bottom-2 right-2 flex flex-col leading-none font-bold rotate-180">
+                    <span>${card.val}</span>
+                    <span>${card.suit}</span>
+                </div>
+            `;
+            return el;
+        }
+
+        function hitCard() {
+            if (!isPlayerTurn || !isGameActive) return;
+            playerHand.push(deck.pop());
+            playSound('card');
+            renderHands(false);
+
+            let score = calculateScore(playerHand);
+            if (score > 21) {
+                isPlayerTurn = false;
+                endRound("Bust! Dealer Wins.");
+            } else if (score === 21) {
+                standTurn();
+            }
+        }
+
+        function standTurn() {
+            if (!isPlayerTurn || !isGameActive) return;
+            isPlayerTurn = false;
+            hitBtn.classList.add('hidden');
+            standBtn.classList.add('hidden');
+
+            // Dealer turns
+            renderHands(true);
+            let dealerScore = calculateScore(dealerHand);
+
+            let dealerInterval = setInterval(() => {
+                if (dealerScore < 17) {
+                    dealerHand.push(deck.pop());
+                    playSound('card');
+                    dealerScore = calculateScore(dealerHand);
+                    renderHands(true);
+                } else {
+                    clearInterval(dealerInterval);
+                    evaluateWinner();
+                }
+            }, 600);
+        }
+
+        function evaluateWinner() {
+            let pScore = calculateScore(playerHand);
+            let dScore = calculateScore(dealerHand);
+
+            if (dScore > 21) {
+                chips += bet * 2;
+                endRound("Dealer Bust! You Win!");
+            } else if (pScore > dScore) {
+                chips += bet * 2;
+                endRound("You Win!");
+            } else if (pScore < dScore) {
+                endRound("Dealer Wins.");
+            } else {
+                chips += bet; // Push
+                endRound("It's a Push (Tie).");
+            }
+            chipCountEl.textContent = chips;
+        }
+
+        function endRound(message) {
+            isGameActive = false;
+            dealBtn.classList.remove('hidden');
+            playSound('win');
+            document.getElementById('modal-message').textContent = message;
+            resultModal.classList.remove('hidden');
+        }
+
+        function closeModalAndNextHand(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            resultModal.classList.add('hidden');
+            startNewHand();
+        }
+
+        startNewHand();
+    </script>
+</body>
+</html>
