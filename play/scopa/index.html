@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Scopa - Tabspace Playables</title>
+    <meta name="description" content="Play classic Italian Scopa card game online for free against the AI with automatic redealing on Tabspace Playables on desktop and mobile.">
+    <meta name="keywords" content="Scopa online, Italian card game, play scopa free, puzzle games online, Tabspace Playables, card game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/scopa">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Scopa - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Italian card game Scopa. Capture cards, score points, and win!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/scopa">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .scopa-card {
+            background-color: #27272a;
+            border: 2px solid #3f3f46;
+            border-radius: 8px;
+            width: 48px;
+            height: 68px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.15s ease, border-color 0.15s ease;
+        }
+        .scopa-card.selected {
+            border-color: var(--brand-orange);
+            transform: translateY(-8px);
+            background-color: #1e293b;
+            box-shadow: 0 4px 12px rgba(255, 109, 0, 0.4);
+        }
+        .scopa-card:hover {
+            border-color: var(--accent-green);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-4 md:px-6 py-3 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 md:gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-12 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-base md:text-2xl font-light">/ Scopa</span>
+            </div>
+            <nav class="flex items-center gap-3 text-base">
+                <a href="../../" class="hidden md:flex btn-card playables-hover text-white px-3 md:px-5 py-2 text-xs md:text-sm items-center">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-3 md:px-6 py-4 md:py-8 space-y-3 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="w-full flex flex-col items-center justify-center gap-1 text-center">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Classic Scopa</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm px-2">Match a card from your hand with table card(s) of equal sum to capture!</p>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="flex justify-between w-full max-w-[360px] text-xs text-zinc-400 px-3 bg-zinc-900/80 py-2 rounded-xl border border-zinc-800">
+            <span>Your Score: <strong id="player-score" class="text-emerald-400 text-sm">0</strong></span>
+            <span>Turn: <strong id="turn-val" class="text-emerald-400 text-sm">Your Turn</strong></span>
+            <span>AI Score: <strong id="ai-score" class="text-orange-400 text-sm">0</strong></span>
+        </div>
+
+        <!-- Table Cards Container -->
+        <div class="card-section p-4 bg-zinc-900/95 w-full max-w-[360px] h-[120px] flex items-center justify-center gap-2 relative flex-wrap overflow-y-auto">
+            <span class="text-[10px] text-zinc-500 uppercase absolute top-2 left-3 tracking-wider">Table Cards</span>
+            <div id="table-cards" class="flex gap-2 items-center justify-center flex-wrap pt-4">
+                <!-- Dynamically populated table cards -->
+            </div>
+        </div>
+
+        <!-- Player Hand Container -->
+        <div class="card-section p-3 bg-zinc-900/95 w-full max-w-[360px] space-y-2">
+            <span class="text-[10px] text-zinc-400 uppercase tracking-wider block text-center">Your Hand (Click card to play)</span>
+            <div id="player-hand" class="flex gap-1.5 justify-center flex-wrap min-h-[80px]">
+                <!-- Dynamically populated player hand -->
+            </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-1 w-full max-w-[360px]">
+            <button type="button" onclick="resetGame()" class="btn-card playables-hover text-zinc-400 px-5 py-2 text-xs cursor-pointer">New Match</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5 cursor-pointer">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Match Concluded</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Game finished.</p>
+                <div>
+                    <button type="button" onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full cursor-pointer">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-4 md:py-6 border-t border-zinc-900 text-center px-4">
+        <p class="text-[11px] md:text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-emerald-500">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'play') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(550, now);
+                osc.frequency.exponentialRampToValueAtTime(350, now + 0.08);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'scopa') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.setValueAtTime(800, now + 0.15);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const suits = ['♠', '♥', '♦', '♣'];
+        const ranks = ['1', '2', '3', '4', '5', '6', '7', 'J', 'Q', 'K'];
+        const rankValues = { '1': 1, '2': 2, '3': 3, '4': 4, '5': 5, '6': 6, '7': 7, 'J': 8, 'Q': 9, 'K': 10 };
+
+        let deck = [];
+        let playerHand = [];
+        let aiHand = [];
+        let tableCards = [];
+        let playerCaptured = [];
+        let aiCaptured = [];
+        let playerScore = 0;
+        let aiScore = 0;
+        let turn = 'player';
+        let isGameActive = true;
+
+        const playerScoreEl = document.getElementById('player-score');
+        const aiScoreEl = document.getElementById('ai-score');
+        const turnValEl = document.getElementById('turn-val');
+        const tableCardsEl = document.getElementById('table-cards');
+        const playerHandEl = document.getElementById('player-hand');
+        const statusDisplay = document.getElementById('game-status');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function resetGame() {
+            playSound('click');
+            isGameActive = true;
+            playerScore = 0;
+            aiScore = 0;
+            playerCaptured = [];
+            aiCaptured = [];
+            turn = 'player';
+
+            updateStats();
+            buildDeck();
+            dealInitialTable();
+            dealHands();
+            renderTable();
+            renderHand();
+
+            turnValEl.textContent = "Your Turn";
+            turnValEl.className = "text-emerald-400 text-sm";
+            statusDisplay.textContent = "Click a card in your hand to capture matching table card(s).";
+        }
+
+        function updateStats() {
+            playerScoreEl.textContent = playerScore;
+            aiScoreEl.textContent = aiScore;
+        }
+
+        function buildDeck() {
+            deck = [];
+            suits.forEach(suit => {
+                ranks.forEach(rank => {
+                    deck.push({ suit, rank, val: rankValues[rank] });
+                });
+            });
+            deck.sort(() => Math.random() - 0.5);
+        }
+
+        function dealInitialTable() {
+            tableCards = [];
+            for (let i = 0; i < 4; i++) {
+                if (deck.length > 0) tableCards.push(deck.pop());
+            }
+        }
+
+        function dealHands() {
+            playerHand = [];
+            aiHand = [];
+            for (let i = 0; i < 3; i++) {
+                if (deck.length > 0) playerHand.push(deck.pop());
+                if (deck.length > 0) aiHand.push(deck.pop());
+            }
+        }
+
+        function renderTable() {
+            tableCardsEl.innerHTML = '';
+            if (tableCards.length === 0) {
+                tableCardsEl.innerHTML = `<span class="text-xs text-zinc-500 italic">Table is empty</span>`;
+                return;
+            }
+            tableCards.forEach((card) => {
+                let cardEl = document.createElement('div');
+                let isRed = card.suit === '♥' || card.suit === '♦';
+                cardEl.className = `scopa-card ${isRed ? 'text-rose-500' : 'text-zinc-100'}`;
+                cardEl.innerHTML = `
+                    <span class="text-xs">${card.rank}</span>
+                    <span class="text-lg">${card.suit}</span>
+                `;
+                tableCardsEl.appendChild(cardEl);
+            });
+        }
+
+        function renderHand() {
+            playerHandEl.innerHTML = '';
+            playerHand.forEach((card, idx) => {
+                let cardEl = document.createElement('div');
+                let isRed = card.suit === '♥' || card.suit === '♦';
+                cardEl.className = `scopa-card ${isRed ? 'text-rose-500' : 'text-zinc-100'}`;
+                cardEl.innerHTML = `
+                    <span class="text-xs">${card.rank}</span>
+                    <span class="text-lg">${card.suit}</span>
+                `;
+                cardEl.onclick = () => playerPlayCard(idx);
+                playerHandEl.appendChild(cardEl);
+            });
+        }
+
+        function playerPlayCard(idx) {
+            if (!isGameActive || turn !== 'player') return;
+
+            let card = playerHand.splice(idx, 1)[0];
+            playSound('play');
+
+            let matchIdx = tableCards.findIndex(t => t.val === card.val);
+            if (matchIdx !== -1) {
+                let captured = tableCards.splice(matchIdx, 1)[0];
+                playerCaptured.push(card, captured);
+                if (tableCards.length === 0) {
+                    playerScore += 1;
+                    playSound('scopa');
+                    statusDisplay.textContent = "Scopa! You cleared the table (+1 point)!";
+                } else {
+                    statusDisplay.textContent = `Captured ${captured.rank}${captured.suit}!`;
+                }
+            } else {
+                tableCards.push(card);
+                statusDisplay.textContent = `Placed ${card.rank}${card.suit} on table.`;
+            }
+
+            updateStats();
+            renderTable();
+            renderHand();
+
+            checkTurnProgression();
+        }
+
+        function checkTurnProgression() {
+            if (playerHand.length === 0 && aiHand.length === 0) {
+                if (deck.length > 0) {
+                    dealHands();
+                    renderHand();
+                    statusDisplay.textContent = "New hands dealt from deck!";
+                    return;
+                } else {
+                    endGame();
+                    return;
+                }
+            }
+
+            turn = 'ai';
+            turnValEl.textContent = "AI Turn";
+            turnValEl.className = "text-orange-400 text-sm";
+            statusDisplay.textContent = "AI is playing...";
+            setTimeout(aiTurn, 1000);
+        }
+
+        function aiTurn() {
+            if (!isGameActive) return;
+
+            if (aiHand.length === 0) {
+                if (deck.length > 0) {
+                    dealHands();
+                } else {
+                    endGame();
+                    return;
+                }
+            }
+
+            if (aiHand.length > 0) {
+                let card = aiHand.pop();
+
+                let matchIdx = tableCards.findIndex(t => t.val === card.val);
+                if (matchIdx !== -1) {
+                    let captured = tableCards.splice(matchIdx, 1)[0];
+                    aiCaptured.push(card, captured);
+                    if (tableCards.length === 0) {
+                        aiScore += 1;
+                        playSound('scopa');
+                        statusDisplay.textContent = "AI scored a Scopa!";
+                    } else {
+                        statusDisplay.textContent = `AI captured ${captured.rank}${captured.suit}!`;
+                    }
+                } else {
+                    tableCards.push(card);
+                    statusDisplay.textContent = `AI placed ${card.rank}${card.suit} on table.`;
+                }
+            }
+
+            updateStats();
+            renderTable();
+
+            if (playerHand.length === 0 && aiHand.length === 0 && deck.length === 0) {
+                endGame();
+                return;
+            }
+
+            // If player's hand ran out but AI and deck still have cards, automatically keep AI moving or redeal hands
+            if (playerHand.length === 0) {
+                if (aiHand.length === 0 && deck.length > 0) {
+                    dealHands();
+                    renderHand();
+                    turn = 'player';
+                    turnValEl.textContent = "Your Turn";
+                    turnValEl.className = "text-emerald-400 text-sm";
+                    statusDisplay.textContent = "New hands dealt from deck!";
+                    return;
+                } else if (aiHand.length > 0) {
+                    setTimeout(aiTurn, 1000);
+                    return;
+                }
+            }
+
+            turn = 'player';
+            turnValEl.textContent = "Your Turn";
+            turnValEl.className = "text-emerald-400 text-sm";
+        }
+
+        function endGame() {
+            isGameActive = false;
+            // Any remaining table cards go to the last player who captured cards
+            if (tableCards.length > 0) {
+                tableCards = [];
+            }
+
+            if (playerCaptured.length >= aiCaptured.length) {
+                playerScore += 1;
+            } else {
+                aiScore += 1;
+            }
+
+            updateStats();
+
+            if (playerScore >= aiScore) {
+                playSound('win');
+                modalTitle.textContent = "Victory!";
+                modalMessage.textContent = `You won the Scopa match with ${playerScore} points to AI's ${aiScore}!`;
+            } else {
+                playSound('lose');
+                modalTitle.textContent = "Defeat!";
+                modalMessage.textContent = `AI won the match with ${aiScore} points to your ${playerScore}.`;
+            }
+            resultModal.classList.remove('hidden');
+            statusDisplay.textContent = "Match Concluded";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Picross - Tabspace Playables</title>
+    <meta name="description" content="Play classic Picross picture logic puzzle game online for free with adjustable difficulty on Tabspace Playables on desktop and mobile.">
+    <meta name="keywords" content="Picross online, nonogram picture puzzle, play picross free, puzzle games online, Tabspace Playables, logic game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/picross">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Picross - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Picross puzzle game. Reveal the hidden picture and win!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/picross">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .picross-cell {
+            aspect-ratio: 1;
+            border: 1px solid #3f3f46;
+            background-color: #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            cursor: pointer;
+            user-select: none;
+            transition: background-color 0.15s ease;
+        }
+        .picross-cell.filled {
+            background-color: var(--brand-orange) !important;
+            border-color: #ff8533;
+        }
+        .picross-cell.marked {
+            background-color: #3f3f46 !important;
+            color: #a1a1aa;
+        }
+        .picross-cell:hover {
+            border-color: var(--accent-green);
+        }
+        .clue-cell {
+            background-color: #18181b;
+            border: 1px solid #27272a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.65rem;
+            color: #a1a1aa;
+            user-select: none;
+            padding: 2px;
+            text-align: center;
+            line-height: 1.1;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Picross</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Picross (Grid Picture Puzzle)</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Left-click to fill cells, right-click to cross/mark empty cells based on row/column numbers!</p>
+        </div>
+
+        <!-- Difficulty Variant Controls -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800 flex-wrap justify-center">
+            <button type="button" onclick="setDifficulty('easy')" id="btn-easy" class="px-3.5 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy (5x5)</button>
+            <button type="button" onclick="setDifficulty('medium')" id="btn-medium" class="px-3.5 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Medium (8x8)</button>
+            <button type="button" onclick="setDifficulty('hard')" id="btn-hard" class="px-3.5 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Hard (10x10)</button>
+        </div>
+
+        <!-- Stats Bar -->
+        <div class="flex justify-between w-full max-w-[380px] text-xs text-zinc-400 px-3 bg-zinc-900/80 py-2 rounded-xl border border-zinc-800">
+            <span>Difficulty: <strong id="diff-val" class="text-brand-orange text-sm">Easy (5x5)</strong></span>
+            <span>Status: <strong id="status-val" class="text-white text-sm">In Progress</strong></span>
+        </div>
+
+        <!-- Picross Board Container -->
+        <div class="card-section p-3 bg-zinc-900/95 w-full max-w-[380px] flex items-center justify-center overflow-x-auto">
+            <div id="picross-grid" class="grid gap-0.5">
+                <!-- Dynamically populated clues and cells grid -->
+            </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-2">
+            <button type="button" onclick="resetGame()" class="btn-card playables-hover text-zinc-400 px-5 py-2 text-xs">New Puzzle</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Picture Revealed!</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Fantastic job solving the Picross puzzle!</p>
+                <div>
+                    <button type="button" onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'fill') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(550, now);
+                osc.frequency.exponentialRampToValueAtTime(350, now + 0.08);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            } else if (type === 'mark') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(200, now + 0.06);
+                gainNode.gain.setValueAtTime(0.06, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        let currentDifficulty = 'easy'; // 'easy' (5x5), 'medium' (8x8), 'hard' (10x10)
+        let GRID_SIZE = 5;
+        let solution = [];
+        let playerGrid = [];
+        let isGameActive = true;
+
+        const solutions = {
+            5: [
+                [0, 1, 1, 1, 0],
+                [1, 1, 0, 1, 1],
+                [1, 0, 1, 0, 1],
+                [0, 1, 0, 1, 0],
+                [0, 0, 1, 0, 0]
+            ],
+            8: [
+                [0, 0, 1, 1, 1, 1, 0, 0],
+                [0, 1, 0, 0, 0, 0, 1, 0],
+                [1, 0, 1, 0, 0, 1, 0, 1],
+                [1, 0, 0, 1, 1, 0, 0, 1],
+                [1, 0, 0, 1, 1, 0, 0, 1],
+                [1, 0, 1, 0, 0, 1, 0, 1],
+                [0, 1, 0, 0, 0, 0, 1, 0],
+                [0, 0, 1, 1, 1, 1, 0, 0]
+            ],
+            10: [
+                [0, 0, 1, 1, 1, 1, 1, 1, 0, 0],
+                [0, 1, 1, 0, 0, 0, 0, 1, 1, 0],
+                [1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+                [1, 0, 0, 1, 0, 0, 1, 0, 0, 1],
+                [1, 1, 0, 0, 1, 1, 0, 0, 1, 1],
+                [0, 1, 1, 0, 0, 0, 0, 1, 1, 0],
+                [0, 0, 1, 1, 1, 1, 1, 1, 0, 0]
+            ]
+        };
+
+        const picrossGrid = document.getElementById('picross-grid');
+        const diffValEl = document.getElementById('diff-val');
+        const statusValEl = document.getElementById('status-val');
+        const statusDisplay = document.getElementById('game-status');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function setDifficulty(level) {
+            playSound('click');
+            currentDifficulty = level;
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === level) {
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-3.5 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all";
+                }
+            });
+
+            if (level === 'easy') {
+                GRID_SIZE = 5;
+                diffValEl.textContent = "Easy (5x5)";
+            } else if (level === 'medium') {
+                GRID_SIZE = 8;
+                diffValEl.textContent = "Medium (8x8)";
+            } else {
+                GRID_SIZE = 10;
+                diffValEl.textContent = "Hard (10x10)";
+            }
+
+            resetGame();
+        }
+
+        function getRowClues(r) {
+            let clues = [];
+            let count = 0;
+            for (let c = 0; c < GRID_SIZE; c++) {
+                if (solution[r][c] === 1) {
+                    count++;
+                } else if (count > 0) {
+                    clues.push(count);
+                    count = 0;
+                }
+            }
+            if (count > 0) clues.push(count);
+            return clues.length > 0 ? clues.join(' ') : '0';
+        }
+
+        function getColClues(c) {
+            let clues = [];
+            let count = 0;
+            for (let r = 0; r < GRID_SIZE; r++) {
+                if (solution[r][c] === 1) {
+                    count++;
+                } else if (count > 0) {
+                    clues.push(count);
+                    count = 0;
+                }
+            }
+            if (count > 0) clues.push(count);
+            return clues.length > 0 ? clues.join('<br>') : '0';
+        }
+
+        function resetGame() {
+            playSound('click');
+            isGameActive = true;
+            solution = solutions[GRID_SIZE];
+            playerGrid = Array(GRID_SIZE).fill(0).map(() => Array(GRID_SIZE).fill(0));
+            statusValEl.textContent = "In Progress";
+            statusDisplay.textContent = "Left-click to fill cells, right-click to cross/mark empty cells!";
+
+            renderGrid();
+        }
+
+        function renderGrid() {
+            picrossGrid.style.gridTemplateColumns = `repeat(${GRID_SIZE + 1}, minmax(0, 1fr))`;
+            picrossGrid.innerHTML = '';
+
+            let corner = document.createElement('div');
+            corner.className = 'clue-cell';
+            picrossGrid.appendChild(corner);
+
+            for (let c = 0; c < GRID_SIZE; c++) {
+                let clueEl = document.createElement('div');
+                clueEl.className = 'clue-cell text-center';
+                clueEl.innerHTML = getColClues(c);
+                picrossGrid.appendChild(clueEl);
+            }
+
+            for (let r = 0; r < GRID_SIZE; r++) {
+                let rowClue = document.createElement('div');
+                rowClue.className = 'clue-cell text-center font-bold px-1';
+                rowClue.textContent = getRowClues(r);
+                picrossGrid.appendChild(rowClue);
+
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    let cell = document.createElement('div');
+                    let state = playerGrid[r][c];
+                    cell.className = `picross-cell ${state === 1 ? 'filled' : (state === 2 ? 'marked' : '')}`;
+                    cell.textContent = state === 2 ? '✕' : '';
+                    
+                    cell.onclick = () => handleCellClick(r, c, false);
+                    cell.oncontextmenu = (e) => {
+                        e.preventDefault();
+                        handleCellClick(r, c, true);
+                    };
+
+                    picrossGrid.appendChild(cell);
+                }
+            }
+        }
+
+        function handleCellClick(r, c, isRightClick) {
+            if (!isGameActive) return;
+
+            if (isRightClick) {
+                playerGrid[r][c] = playerGrid[r][c] === 2 ? 0 : 2;
+                playSound('mark');
+            } else {
+                playerGrid[r][c] = playerGrid[r][c] === 1 ? 0 : 1;
+                playSound('fill');
+            }
+
+            renderGrid();
+            checkWinCondition();
+        }
+
+        function checkWinCondition() {
+            let isWon = true;
+            for (let r = 0; r < GRID_SIZE; r++) {
+                for (let c = 0; c < GRID_SIZE; c++) {
+                    let expected = solution[r][c];
+                    let actual = playerGrid[r][c] === 1 ? 1 : 0;
+                    if (expected !== actual) {
+                        isWon = false;
+                        break;
+                    }
+                }
+            }
+
+            if (isWon) {
+                isGameActive = false;
+                playSound('win');
+                statusValEl.textContent = "Completed!";
+                modalTitle.textContent = "Picture Revealed!";
+                modalMessage.textContent = "Brilliant logic! You correctly solved the Picross puzzle!";
+                resultModal.classList.remove('hidden');
+                statusDisplay.textContent = "Picross Finished";
+            }
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        setDifficulty('easy');
+    </script>
+</body>
+</html>

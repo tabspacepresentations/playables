@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Word Ladder - Tabspace Playables</title>
+    <meta name="description" content="Play classic Word Ladder online for free on Tabspace Playables. Change one letter at a time to transform start words into end words on desktop and mobile.">
+    <meta name="keywords" content="Word Ladder online, word puzzle game, play word ladder free, puzzle games online, Tabspace Playables, Lewis Carroll game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/word-ladder">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Word Ladder - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Word Ladder puzzle. Change one letter at a time and win the match!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/word-ladder">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .ladder-word-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #27272a;
+            border: 2px solid #3f3f46;
+            border-radius: 8px;
+            font-size: 1.25rem;
+            letter-spacing: 0.15em;
+            padding: 0.75rem 1rem;
+            color: #ffffff;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Word Ladder</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Word Ladder</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Change one letter at a time to reach the target word!</p>
+        </div>
+
+        <!-- Difficulty Controls -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+            <button type="button" onclick="setDifficulty('easy')" id="btn-easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy</button>
+            <button type="button" onclick="setDifficulty('medium')" id="btn-medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Medium</button>
+            <button type="button" onclick="setDifficulty('hard')" id="btn-hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Hard</button>
+        </div>
+
+        <!-- Ladder Goals -->
+        <div class="flex items-center justify-center gap-4 w-full max-w-[380px] text-xs">
+            <div class="card-section p-3 bg-zinc-900 text-center flex-1">
+                <span class="text-zinc-500 block mb-1">START</span>
+                <span id="start-word-label" class="text-white text-base font-bold tracking-wider">COLD</span>
+            </div>
+            <div class="text-zinc-500 text-lg">➔</div>
+            <div class="card-section p-3 bg-zinc-900 text-center flex-1">
+                <span class="text-zinc-500 block mb-1">TARGET</span>
+                <span id="target-word-label" class="text-brand-orange text-base font-bold tracking-wider">WARM</span>
+            </div>
+        </div>
+
+        <!-- Word Ladder History Chain -->
+        <div id="ladder-chain" class="flex flex-col gap-2 w-full max-w-[380px] max-h-[220px] overflow-y-auto px-1">
+            <!-- Dynamically populated ladder steps -->
+        </div>
+
+        <!-- Next Word Input -->
+        <div class="w-full max-w-[380px] space-y-3">
+            <input type="text" id="user-word-input" placeholder="Type next 4-letter word..." class="w-full bg-zinc-900 border border-zinc-700 rounded-xl px-4 py-3 text-center text-white tracking-widest text-lg focus:outline-none focus:border-brand-green uppercase" maxlength="4" autocomplete="off" />
+            <div class="flex gap-2">
+                <button type="button" onclick="submitWord()" class="cta-btn-green py-2.5 text-sm w-full font-bold">Step Up</button>
+                <button type="button" onclick="undoStep()" class="btn-card playables-hover text-zinc-300 px-4 py-2.5 text-sm">Undo</button>
+            </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-2">
+            <button type="button" onclick="resetGame()" class="btn-card playables-hover text-zinc-400 px-5 py-2 text-xs">Restart Game</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Ladder Complete!</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">You successfully reached the target word!</p>
+                <div>
+                    <button type="button" onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'match') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(500, now);
+                osc.frequency.exponentialRampToValueAtTime(800, now + 0.12);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+                osc.start(now);
+                osc.stop(now + 0.12);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const ladderPuzzles = {
+            easy: { start: "COLD", target: "WARM", validDict: ["COLD", "CORD", "CARD", "WARD", "WARM", "BOLD", "SOLD", "CORN", "WORM"] },
+            medium: { start: "DOG", target: "CAT", validDict: ["DOG", "COT", "CAT", "COG", "DOT", "FAT", "BAT", "COP", "CAP"] },
+            hard: { start: "HEAD", target: "TAIL", validDict: ["HEAD", "MEAD", "MEAL", "TEAL", "TALL", "TAIL", "HEAL", "HEAR", "PEAR", "PALL"] }
+        };
+
+        let difficulty = 'easy';
+        let currentPuzzle = ladderPuzzles.easy;
+        let ladderChain = [];
+        let isGameActive = true;
+
+        const startWordLabel = document.getElementById('start-word-label');
+        const targetWordLabel = document.getElementById('target-word-label');
+        const ladderChainEl = document.getElementById('ladder-chain');
+        const userWordInputEl = document.getElementById('user-word-input');
+        const statusDisplay = document.getElementById('game-status');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function setDifficulty(level) {
+            playSound('click');
+            difficulty = level;
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === level) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all";
+                }
+            });
+            resetGame();
+        }
+
+        function resetGame() {
+            playSound('click');
+            isGameActive = true;
+            currentPuzzle = ladderPuzzles[difficulty];
+            ladderChain = [currentPuzzle.start];
+            startWordLabel.textContent = currentPuzzle.start;
+            targetWordLabel.textContent = currentPuzzle.target;
+            userWordInputEl.value = '';
+            userWordInputEl.maxLength = currentPuzzle.start.length;
+            statusDisplay.textContent = `Change 1 letter at a time from ${currentPuzzle.start} to ${currentPuzzle.target}!`;
+            renderChain();
+        }
+
+        function renderChain() {
+            ladderChainEl.innerHTML = '';
+            ladderChain.forEach((word, index) => {
+                const box = document.createElement('div');
+                box.className = "ladder-word-box text-center font-bold";
+                box.textContent = word;
+                if (index === ladderChain.length - 1) {
+                    box.style.borderColor = "var(--accent-green)";
+                }
+                ladderChainEl.appendChild(box);
+            });
+            ladderChainEl.scrollTop = ladderChainEl.scrollHeight;
+        }
+
+        function isValidStep(word1, word2) {
+            if (word1.length !== word2.length) return false;
+            let diffs = 0;
+            for (let i = 0; i < word1.length; i++) {
+                if (word1[i] !== word2[i]) diffs++;
+            }
+            return diffs === 1;
+        }
+
+        function submitWord() {
+            if (!isGameActive) return;
+            const nextWord = userWordInputEl.value.trim().toUpperCase();
+            const currentWord = ladderChain[ladderChain.length - 1];
+
+            if (nextWord.length !== currentPuzzle.start.length) {
+                statusDisplay.textContent = `Word must be ${currentPuzzle.start.length} letters long!`;
+                playSound('click');
+                return;
+            }
+
+            if (!currentPuzzle.validDict.includes(nextWord)) {
+                statusDisplay.textContent = "Not in the puzzle dictionary! Try another word.";
+                playSound('click');
+                return;
+            }
+
+            if (!isValidStep(currentWord, nextWord)) {
+                statusDisplay.textContent = "Invalid step! You can only change exactly 1 letter.";
+                playSound('click');
+                return;
+            }
+
+            if (ladderChain.includes(nextWord)) {
+                statusDisplay.textContent = "You already used that word in your ladder!";
+                playSound('click');
+                return;
+            }
+
+            ladderChain.push(nextWord);
+            userWordInputEl.value = '';
+            playSound('match');
+
+            if (nextWord === currentPuzzle.target) {
+                endGame();
+                return;
+            }
+
+            statusDisplay.textContent = `Great step! Keep going toward ${currentPuzzle.target}.`;
+            renderChain();
+        }
+
+        function undoStep() {
+            if (!isGameActive || ladderChain.length <= 1) return;
+            playSound('click');
+            ladderChain.pop();
+            statusDisplay.textContent = "Step undone.";
+            renderChain();
+        }
+
+        userWordInputEl.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                submitWord();
+            }
+        });
+
+        function endGame() {
+            isGameActive = false;
+            playSound('win');
+            modalTitle.textContent = "Ladder Complete!";
+            modalMessage.textContent = `Amazing! You solved the ladder in ${ladderChain.length - 1} steps!`;
+            resultModal.classList.remove('hidden');
+            statusDisplay.textContent = "Puzzle Solved!";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

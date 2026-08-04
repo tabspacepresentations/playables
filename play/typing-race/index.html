@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Typing Race - Tabspace Playables</title>
+    <meta name="description" content="Play classic Typing Race multiplayer-style speed game online for free with adjustable difficulty on Tabspace Playables on desktop and mobile.">
+    <meta name="keywords" content="Typing Race online, speed typing race game, play typing race free, puzzle games online, Tabspace Playables, educational game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/typing-race">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Typing Race - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself or race against the AI with the classic Typing Race game. Type fast, speed ahead, and win!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/typing-race">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Typing Text Styles */
+        .char-correct { color: #22c55e; }
+        .char-incorrect { color: #ef4444; background-color: rgba(239, 68, 68, 0.2); }
+        .char-current { border-bottom: 2px solid #ff6D00; }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Typing Race</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-3 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <!-- Header Section with Centered Name -->
+        <div class="w-full flex flex-col items-center justify-center gap-2 text-center">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Typing Race vs AI</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Your Progress: <span id="player-progress" class="text-brand-green font-bold text-base">0%</span> | AI Progress: <span id="ai-progress" class="text-brand-orange font-bold text-base">0%</span></p>
+        </div>
+
+        <!-- Mode Selection Controls -->
+        <div class="flex flex-wrap items-center justify-center gap-2 bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800">
+            <button onclick="setDifficulty('easy', 'Easy')" id="mode-Easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy AI</button>
+            <button onclick="setDifficulty('medium', 'Medium')" id="mode-Medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800">Medium AI</button>
+            <button onclick="setDifficulty('hard', 'Hard')" id="mode-Hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800">Hard AI</button>
+        </div>
+
+        <!-- Race Tracks -->
+        <div class="w-full max-w-[700px] space-y-2 card-section p-4 bg-zinc-900/90 border border-zinc-700">
+            <div class="space-y-1">
+                <div class="flex justify-between text-xs text-zinc-400">
+                    <span>🚗 You</span>
+                    <span id="player-pos-label">0/0 chars</span>
+                </div>
+                <div class="w-full h-3 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800">
+                    <div id="player-track-bar" class="h-full bg-brand-green transition-all duration-150" style="width: 0%"></div>
+                </div>
+            </div>
+            <div class="space-y-1 pt-2">
+                <div class="flex justify-between text-xs text-zinc-400">
+                    <span>🤖 Computer Racer</span>
+                    <span id="ai-pos-label">0/0 chars</span>
+                </div>
+                <div class="w-full h-3 bg-zinc-950 rounded-full overflow-hidden border border-zinc-800">
+                    <div id="ai-track-bar" class="h-full bg-brand-orange transition-all duration-150" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Typing Box Area -->
+        <div class="card-section p-6 md:p-8 bg-zinc-900/90 border border-zinc-700 shadow-xl w-full max-w-[700px] space-y-4">
+            <div id="text-display" class="text-base md:text-lg text-zinc-300 leading-relaxed font-mono select-none min-h-[120px] max-h-[180px] bg-zinc-950 p-4 rounded-xl border border-zinc-800 overflow-y-auto">
+                Type the text below to race forward...
+            </div>
+            <input type="text" id="hidden-input" class="w-full bg-zinc-950 border border-zinc-700 rounded-xl px-4 py-3 text-white text-base focus:border-brand-green focus:outline-none transition-all" placeholder="Type here to race..." autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+            
+            <!-- Side-by-side Reset and Fullscreen Buttons -->
+            <div class="flex items-center justify-center gap-4 pt-2">
+                <button onclick="resetRace()" class="btn-card playables-hover text-white px-6 py-2.5 text-sm font-bold flex items-center gap-2">
+                    <span>Reset</span> 
+                </button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-6 py-2.5 text-sm font-bold flex items-center gap-2">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-md w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Race Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Winner message here</p>
+                <div>
+                    <button onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-3 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click' || type === 'type') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.04);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.04);
+                osc.start(now);
+                osc.stop(now + 0.04);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const raceTexts = [
+            "the quick brown fox jumps over the lazy dog while accelerating rapidly across the digital racetrack to claim ultimate victory in this high speed typing competition",
+            "competitive typing races require intense finger dexterity rhythmic cadence unwavering mental focus and lightning fast error free keystroke execution from start to finish",
+            "software developers and enthusiastic typists push their words per minute benchmarks higher every single day by practicing complex algorithms and standard code syntax snippets"
+        ];
+
+        let targetText = "";
+        let currentDifficulty = 'easy';
+        let currentModeName = 'Easy';
+        let isRaceActive = false;
+        let playerIndex = 0;
+        let aiIndex = 0;
+        let aiInterval = null;
+        let aiSpeedCharsPerSec = 2; // Easy: ~24 WPM
+
+        const textDisplay = document.getElementById('text-display');
+        const hiddenInput = document.getElementById('hidden-input');
+        const playerProgress = document.getElementById('player-progress');
+        const aiProgress = document.getElementById('ai-progress');
+        const playerTrackBar = document.getElementById('player-track-bar');
+        const aiTrackBar = document.getElementById('ai-track-bar');
+        const playerPosLabel = document.getElementById('player-pos-label');
+        const aiPosLabel = document.getElementById('ai-pos-label');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function setDifficulty(difficulty, name) {
+            playSound('click');
+            currentDifficulty = difficulty;
+            currentModeName = name;
+            ['Easy', 'Medium', 'Hard'].forEach(d => {
+                const btn = document.getElementById(`mode-${d}`);
+                if (d === name) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800";
+                }
+            });
+
+            if (difficulty === 'easy') aiSpeedCharsPerSec = 2.2; // ~26 WPM
+            else if (difficulty === 'medium') aiSpeedCharsPerSec = 3.8; // ~45 WPM
+            else aiSpeedCharsPerSec = 5.5; // ~66 WPM
+
+            resetRace();
+        }
+
+        function resetRace() {
+            playSound('click');
+            if (aiInterval) clearInterval(aiInterval);
+            targetText = raceTexts[Math.floor(Math.random() * raceTexts.length)];
+            isRaceActive = true;
+            playerIndex = 0;
+            aiIndex = 0;
+
+            hiddenInput.value = "";
+            hiddenInput.disabled = false;
+            hiddenInput.focus();
+
+            renderText("");
+            updateTracks();
+
+            // Start AI movement loop
+            aiInterval = setInterval(() => {
+                if (!isRaceActive) return;
+                aiIndex += aiSpeedCharsPerSec * 0.1;
+                if (aiIndex >= targetText.length) {
+                    aiIndex = targetText.length;
+                    updateTracks();
+                    endRace('ai');
+                } else {
+                    updateTracks();
+                }
+            }, 100);
+        }
+
+        function updateTracks() {
+            let totalLen = targetText.length;
+            let pPercent = Math.round((playerIndex / totalLen) * 100);
+            let aPercent = Math.round((aiIndex / totalLen) * 100);
+
+            playerProgress.textContent = `${pPercent}%`;
+            aiProgress.textContent = `${aPercent}%`;
+
+            playerTrackBar.style.width = `${pPercent}%`;
+            aiTrackBar.style.width = `${aPercent}%`;
+
+            playerPosLabel.textContent = `${Math.floor(playerIndex)}/${totalLen} chars`;
+            aiPosLabel.textContent = `${Math.floor(aiIndex)}/${totalLen} chars`;
+        }
+
+        function renderText(inputVal) {
+            let html = "";
+            let correctCount = 0;
+
+            for (let i = 0; i < targetText.length; i++) {
+                if (i < inputVal.length) {
+                    if (inputVal[i] === targetText[i]) {
+                        html += `<span class="char-correct">${targetText[i]}</span>`;
+                        correctCount++;
+                    } else {
+                        html += `<span class="char-incorrect">${targetText[i]}</span>`;
+                    }
+                } else if (i === inputVal.length) {
+                    html += `<span class="char-current">${targetText[i]}</span>`;
+                } else {
+                    html += `<span>${targetText[i]}</span>`;
+                }
+            }
+            textDisplay.innerHTML = html;
+            playerIndex = correctCount;
+            updateTracks();
+        }
+
+        hiddenInput.addEventListener('input', (e) => {
+            if (!isRaceActive) return;
+
+            playSound('type');
+            const val = e.target.value;
+            renderText(val);
+
+            if (playerIndex >= targetText.length) {
+                endRace('player');
+            }
+        });
+
+        function endRace(winner) {
+            isRaceActive = false;
+            if (aiInterval) clearInterval(aiInterval);
+            hiddenInput.disabled = true;
+
+            if (winner === 'player') {
+                playSound('win');
+                modalTitle.textContent = "Victory!";
+                modalMessage.textContent = "Lightning fast fingers! You crossed the finish line before the computer racer!";
+            } else {
+                playSound('lose');
+                modalTitle.textContent = "Defeat!";
+                modalMessage.textContent = "The computer racer crossed the finish line first! Practice more to beat its speed.";
+            }
+            resultModal.classList.remove('hidden');
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            setDifficulty(currentDifficulty, currentModeName);
+        }
+
+        setDifficulty('easy', 'Easy');
+    </script>
+</body>
+</html>

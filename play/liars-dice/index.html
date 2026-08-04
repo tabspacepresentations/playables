@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Liar's Dice - Tabspace Playables</title>
+    <meta name="description" content="Play classic Liar's Dice bluffing game online for free on Tabspace Playables against the AI on desktop and mobile.">
+    <meta name="keywords" content="Liar's Dice online, bluffing dice game, play liars dice free, puzzle games online, Tabspace Playables, strategy game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/liars-dice">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Liar's Dice - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic bluffing game Liar's Dice. Call out bluffs and win the match!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/liars-dice">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .dice-box {
+            background-color: #27272a;
+            border: 2px solid #3f3f46;
+            border-radius: 10px;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #ffffff;
+            user-select: none;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Liar's Dice</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Liar's Dice</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Make a bid or call out the opponent's bluff!</p>
+        </div>
+
+        <!-- Game Stats Bar -->
+        <div class="flex justify-between w-full max-w-[380px] text-xs text-zinc-400 px-3 bg-zinc-900/80 py-2 rounded-xl border border-zinc-800">
+            <span>Your Dice: <strong id="player-dice-count" class="text-brand-green text-sm">5</strong></span>
+            <span>AI Dice: <strong id="ai-dice-count" class="text-brand-orange text-sm">5</strong></span>
+            <span>Current Bid: <strong id="current-bid-display" class="text-white text-sm">None</strong></span>
+        </div>
+
+        <!-- AI Dice Area (Hidden) -->
+        <div class="card-section p-4 bg-zinc-900/90 w-full max-w-[380px] space-y-2 text-center">
+            <span class="text-xs text-zinc-400 uppercase tracking-wider">AI Cup (Hidden)</span>
+            <div id="ai-dice-container" class="flex justify-center gap-2">
+                <!-- Dynamically populated hidden dice -->
+            </div>
+        </div>
+
+        <!-- Player Dice Area -->
+        <div class="card-section p-4 bg-zinc-900/90 w-full max-w-[380px] space-y-2 text-center">
+            <span class="text-xs text-zinc-400 uppercase tracking-wider">Your Cup</span>
+            <div id="player-dice-container" class="flex justify-center gap-2">
+                <!-- Dynamically populated player dice -->
+            </div>
+        </div>
+
+        <!-- Bidding / Action Controls -->
+        <div id="action-controls" class="card-section p-4 bg-zinc-900/90 w-full max-w-[380px] space-y-3">
+            <div class="flex items-center justify-center gap-2">
+                <span class="text-xs text-zinc-300">Quantity:</span>
+                <input type="number" id="bid-qty" min="1" max="10" value="1" class="w-16 bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1 text-center text-white text-sm">
+                <span class="text-xs text-zinc-300">Face:</span>
+                <select id="bid-face" class="bg-zinc-800 border border-zinc-700 rounded-lg px-2 py-1 text-white text-sm">
+                    <option value="1">⚀ (1)</option>
+                    <option value="2">⚁ (2)</option>
+                    <option value="3" selected>⚂ (3)</option>
+                    <option value="4">⚃ (4)</option>
+                    <option value="5">⚄ (5)</option>
+                    <option value="6">⚅ (6)</option>
+                </select>
+            </div>
+            <div class="flex gap-2 justify-center">
+                <button type="button" onclick="placeBid()" class="btn-card playables-hover text-brand-green px-5 py-2 text-xs font-bold">Place Bid</button>
+                <button type="button" onclick="callLiars()" id="liar-btn" class="btn-card playables-hover text-red-400 px-5 py-2 text-xs font-bold hidden">Call Liar!</button>
+            </div>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-1">
+            <button type="button" onclick="resetGame()" class="btn-card playables-hover text-zinc-400 px-5 py-2 text-xs">New Match</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Round Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Round concluded.</p>
+                <div>
+                    <button type="button" onclick="closeModalAndNextRound()" class="cta-btn-green px-8 py-3 text-base w-full">Next Round</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'dice') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(350, now);
+                osc.frequency.exponentialRampToValueAtTime(150, now + 0.1);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const diceFaces = ['', '⚀', '⚁', '⚂', '⚃', '⚄', '⚅'];
+
+        let playerDiceCount = 5;
+        let aiDiceCount = 5;
+        let playerDice = [];
+        let aiDice = [];
+        let currentBid = null; // { qty, face, bidder: 'player' or 'ai' }
+        let turn = 'player';
+        let isGameActive = true;
+
+        const playerDiceContainer = document.getElementById('player-dice-container');
+        const aiDiceContainer = document.getElementById('ai-dice-container');
+        const playerDiceCountEl = document.getElementById('player-dice-count');
+        const aiDiceCountEl = document.getElementById('ai-dice-count');
+        const currentBidDisplay = document.getElementById('current-bid-display');
+        const statusDisplay = document.getElementById('game-status');
+        const liarBtn = document.getElementById('liar-btn');
+        const bidQtyInput = document.getElementById('bid-qty');
+        const bidFaceSelect = document.getElementById('bid-face');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function resetGame() {
+            playerDiceCount = 5;
+            aiDiceCount = 5;
+            startNewRound();
+        }
+
+        function startNewRound() {
+            playSound('dice');
+            isGameActive = true;
+            currentBid = null;
+            currentBidDisplay.textContent = "None";
+            liarBtn.classList.add('hidden');
+
+            playerDice = [];
+            for (let i = 0; i < playerDiceCount; i++) {
+                playerDice.push(Math.floor(Math.random() * 6) + 1);
+            }
+            playerDice.sort((a,b) => a - b);
+
+            aiDice = [];
+            for (let i = 0; i < aiDiceCount; i++) {
+                aiDice.push(Math.floor(Math.random() * 6) + 1);
+            }
+            aiDice.sort((a,b) => a - b);
+
+            renderDice();
+            turn = 'player';
+            statusDisplay.textContent = "Your turn: Place your opening bid.";
+        }
+
+        function renderDice(revealAi = false) {
+            playerDiceContainer.innerHTML = '';
+            playerDice.forEach(val => {
+                let box = document.createElement('div');
+                box.className = 'dice-box';
+                box.textContent = diceFaces[val];
+                playerDiceContainer.appendChild(box);
+            });
+
+            aiDiceContainer.innerHTML = '';
+            aiDice.forEach(val => {
+                let box = document.createElement('div');
+                box.className = 'dice-box';
+                box.textContent = revealAi ? diceFaces[val] : '🞂';
+                aiDiceContainer.appendChild(box);
+            });
+
+            playerDiceCountEl.textContent = playerDiceCount;
+            aiDiceCountEl.textContent = aiDiceCount;
+        }
+
+        function placeBid() {
+            if (!isGameActive || turn !== 'player') return;
+
+            let qty = parseInt(bidQtyInput.value);
+            let face = parseInt(bidFaceSelect.value);
+
+            if (isNaN(qty) || qty < 1) {
+                statusDisplay.textContent = "Please enter a valid quantity.";
+                return;
+            }
+
+            // Validate against current bid if exists
+            if (currentBid) {
+                let totalDice = playerDiceCount + aiDiceCount;
+                if (qty > totalDice) {
+                    statusDisplay.textContent = `Quantity cannot exceed total dice in play (${totalDice}).`;
+                    return;
+                }
+                if (qty < currentBid.qty || (qty === currentBid.qty && face <= currentBid.face)) {
+                    statusDisplay.textContent = "Higher bid required (either higher quantity or higher face value)!";
+                    return;
+                }
+            }
+
+            currentBid = { qty, face, bidder: 'player' };
+            currentBidDisplay.textContent = `${qty} of ${diceFaces[face]} (${face})`;
+            playSound('click');
+
+            liarBtn.classList.remove('hidden');
+            turn = 'ai';
+            statusDisplay.textContent = "AI is thinking...";
+
+            setTimeout(aiTurn, 900);
+        }
+
+        function aiTurn() {
+            if (!isGameActive) return;
+
+            // Simple AI logic: either raise bid or call liar
+            let totalDice = playerDiceCount + aiDiceCount;
+
+            if (!currentBid) {
+                // AI opening bid
+                let randomFace = Math.floor(Math.random() * 6) + 1;
+                let randomQty = Math.max(1, Math.floor(aiDiceCount * 0.5) + 1);
+                currentBid = { qty: randomQty, face: randomFace, bidder: 'ai' };
+                currentBidDisplay.textContent = `${randomQty} of ${diceFaces[randomFace]} (${randomFace})`;
+                playSound('click');
+                statusDisplay.textContent = `AI bids ${randomQty} of ${diceFaces[randomFace]}. Your turn!`;
+                turn = 'player';
+                liarBtn.classList.remove('hidden');
+            } else {
+                // Decide whether to call liar or outbid
+                let shouldCallLiar = Math.random() < 0.35 || currentBid.qty > totalDice * 0.6;
+
+                if (shouldCallLiar) {
+                    resolveLiars('ai');
+                } else {
+                    // Outbid player
+                    let newQty = currentBid.qty + (Math.random() < 0.5 ? 0 : 1);
+                    let newFace = currentBid.face < 6 ? currentBid.face + 1 : currentBid.face;
+                    if (newQty > totalDice) newQty = totalDice;
+
+                    currentBid = { qty: newQty, face: newFace, bidder: 'ai' };
+                    currentBidDisplay.textContent = `${newQty} of ${diceFaces[newFace]} (${newFace})`;
+                    playSound('click');
+                    statusDisplay.textContent = `AI raises bid to ${newQty} of ${diceFaces[newFace]}. Your turn!`;
+                    turn = 'player';
+                    liarBtn.classList.remove('hidden');
+                }
+            }
+        }
+
+        function callLiars() {
+            if (!isGameActive || turn !== 'player' || !currentBid) return;
+            resolveLiars('player');
+        }
+
+        function resolveLiars(caller) {
+            isGameActive = false;
+            renderDice(true); // Reveal AI dice
+
+            let targetFace = currentBid.face;
+            let actualCount = 0;
+
+            playerDice.forEach(d => { if (d === targetFace) actualCount++; });
+            aiDice.forEach(d => { if (d === targetFace) actualCount++; });
+
+            let bidder = currentBid.bidder;
+            let accusedWon = false;
+
+            if (actualCount >= currentBid.qty) {
+                // Bid was true! Caller was wrong, caller loses 1 die.
+                accusedWon = true; // Bidder won
+                if (caller === 'player') playerDiceCount--;
+                else aiDiceCount--;
+            } else {
+                // Bid was false! Bidder was bluffing, bidder loses 1 die.
+                accusedWon = false; // Bidder lost
+                if (bidder === 'player') playerDiceCount--;
+                else aiDiceCount--;
+            }
+
+            let msg = `Bid was ${currentBid.qty} of ${diceFaces[targetFace]}. Actual count was ${actualCount}. `;
+            if (caller === 'player') {
+                msg += actualCount >= currentBid.qty ? "You were wrong! You lose a die." : "Spot on! AI was bluffing and loses a die.";
+            } else {
+                msg += actualCount >= currentBid.qty ? "AI was wrong! AI loses a die." : "AI caught your bluff! You lose a die.";
+            }
+
+            if (actualCount >= currentBid.qty) playSound('lose');
+            else playSound('win');
+
+            modalTitle.textContent = "Round Results";
+            modalMessage.textContent = msg;
+
+            setTimeout(() => {
+                if (playerDiceCount <= 0 || aiDiceCount <= 0) {
+                    endMatch();
+                } else {
+                    resultModal.classList.remove('hidden');
+                }
+            }, 500);
+        }
+
+        function endMatch() {
+            if (playerDiceCount <= 0) {
+                playSound('lose');
+                modalTitle.textContent = "Defeat!";
+                modalMessage.textContent = "You lost all your dice! AI wins the match.";
+            } else {
+                playSound('win');
+                modalTitle.textContent = "Victory!";
+                modalMessage.textContent = "AI lost all its dice! You win the match!";
+            }
+            resultModal.classList.remove('hidden');
+        }
+
+        function closeModalAndNextRound() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            if (playerDiceCount <= 0 || aiDiceCount <= 0) {
+                resetGame();
+            } else {
+                startNewRound();
+            }
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

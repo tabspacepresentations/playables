@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Visual Memory - Tabspace Playables</title>
+    <meta name="description" content="Play classic Visual Memory online for free on Tabspace Playables. Test and train your memory by recalling glowing tile patterns on desktop and mobile.">
+    <meta name="keywords" content="Visual Memory online, memory grid game, play visual memory free, puzzle games online, Tabspace Playables, brain training">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/visual-memory">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Visual Memory - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Visual Memory puzzle. Memorize tiles and win the match!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/visual-memory">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+
+        .memory-tile {
+            background-color: #27272a;
+            border: 2px solid #3f3f46;
+            border-radius: 8px;
+            aspect-ratio: 1;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .memory-tile:hover {
+            border-color: var(--accent-green);
+        }
+        .memory-tile.highlight {
+            background-color: #ff6D00 !important;
+            border-color: #ea580c !important;
+            box-shadow: 0 0 15px rgba(255, 109, 0, 0.6);
+        }
+        .memory-tile.correct {
+            background-color: #047857 !important;
+            border-color: #059669 !important;
+        }
+        .memory-tile.wrong {
+            background-color: #991b1b !important;
+            border-color: #b91c1c !important;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Visual Memory</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-1">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Visual Memory</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Memorize the highlighted squares!</p>
+        </div>
+
+        <!-- Difficulty Controls -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+            <button type="button" onclick="setDifficulty('easy')" id="btn-easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy</button>
+            <button type="button" onclick="setDifficulty('medium')" id="btn-medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Medium</button>
+            <button type="button" onclick="setDifficulty('hard')" id="btn-hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all">Hard</button>
+        </div>
+
+        <!-- Stats Display -->
+        <div class="flex justify-between w-full max-w-[360px] text-xs text-zinc-400 px-2">
+            <span>Level: <strong id="level-val" class="text-white">1</strong></span>
+            <span>Mistakes: <strong id="mistakes-val" class="text-white">0 / 3</strong></span>
+        </div>
+
+        <!-- Memory Grid Board -->
+        <div id="memory-grid" class="grid w-full max-w-[360px] aspect-square card-section p-4 bg-zinc-900/90 gap-2 select-none">
+            <!-- Dynamically generated via JS -->
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex gap-2 justify-center pt-2">
+            <button type="button" onclick="resetGame()" class="btn-card playables-hover text-zinc-400 px-5 py-2 text-xs">Restart Game</button>
+            <button type="button" onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Your memory test has concluded.</p>
+                <div>
+                    <button type="button" onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'match') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(600, now);
+                osc.frequency.exponentialRampToValueAtTime(900, now + 0.1);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+                osc.start(now);
+                osc.stop(now + 0.1);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.4);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.4);
+                osc.start(now);
+                osc.stop(now + 0.4);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        let difficulty = 'easy';
+        let gridSize = 3; // 3x3 grid for easy
+        let level = 1;
+        let mistakes = 0;
+        let targetTiles = [];
+        let playerSelections = [];
+        let isInteractive = false;
+        let isGameActive = true;
+
+        const memoryGridEl = document.getElementById('memory-grid');
+        const levelValEl = document.getElementById('level-val');
+        const mistakesValEl = document.getElementById('mistakes-val');
+        const statusDisplay = document.getElementById('game-status');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function setDifficulty(levelSetting) {
+            playSound('click');
+            difficulty = levelSetting;
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === levelSetting) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all";
+                }
+            });
+            if (levelSetting === 'easy') gridSize = 3;
+            else if (levelSetting === 'medium') gridSize = 4;
+            else gridSize = 5;
+            resetGame();
+        }
+
+        function resetGame() {
+            playSound('click');
+            isGameActive = true;
+            level = 1;
+            mistakes = 0;
+            levelValEl.textContent = level;
+            mistakesValEl.textContent = `${mistakes} / 3`;
+            startLevel();
+        }
+
+        function startLevel() {
+            isInteractive = false;
+            playerSelections = [];
+            targetTiles = [];
+
+            memoryGridEl.style.gridTemplateColumns = `repeat(${gridSize}, minmax(0, 1fr))`;
+            renderGrid(false);
+
+            // Determine number of highlight tiles based on level & grid size
+            let tileCount = Math.min(gridSize * gridSize - 2, 2 + level);
+            let totalCells = gridSize * gridSize;
+            let indices = Array.from({length: totalCells}, (_, i) => i);
+            indices.sort(() => Math.random() - 0.5);
+            targetTiles = indices.slice(0, tileCount);
+
+            statusDisplay.textContent = "Memorize the pattern...";
+
+            // Highlight target tiles
+            setTimeout(() => {
+                const tiles = memoryGridEl.children;
+                targetTiles.forEach(idx => {
+                    tiles[idx].classList.add('highlight');
+                });
+                playSound('match');
+
+                // Hide highlights after delay
+                let displayTime = Math.max(800, 1600 - level * 100);
+                setTimeout(() => {
+                    targetTiles.forEach(idx => {
+                        tiles[idx].classList.remove('highlight');
+                    });
+                    statusDisplay.textContent = "Your turn! Tap the highlighted tiles.";
+                    isInteractive = true;
+                }, displayTime);
+            }, 500);
+        }
+
+        function renderGrid(showAll = false) {
+            memoryGridEl.innerHTML = '';
+            let totalCells = gridSize * gridSize;
+            for (let i = 0; i < totalCells; i++) {
+                const tile = document.createElement('div');
+                tile.className = "memory-tile";
+                if (showAll && targetTiles.includes(i)) {
+                    tile.classList.add('highlight');
+                }
+                tile.onclick = () => handleTileClick(i, tile);
+                memoryGridEl.appendChild(tile);
+            }
+        }
+
+        function handleTileClick(index, tileEl) {
+            if (!isGameActive || !isInteractive) return;
+            if (playerSelections.includes(index)) return;
+
+            if (targetTiles.includes(index)) {
+                playSound('click');
+                tileEl.classList.add('correct');
+                playerSelections.push(index);
+
+                if (playerSelections.length === targetTiles.length) {
+                    isInteractive = false;
+                    playSound('win');
+                    statusDisplay.textContent = "Correct! Advancing level...";
+                    level++;
+                    levelValEl.textContent = level;
+                    setTimeout(startLevel, 1000);
+                }
+            } else {
+                playSound('lose');
+                tileEl.classList.add('wrong');
+                mistakes++;
+                mistakesValEl.textContent = `${mistakes} / 3`;
+
+                if (mistakes >= 3) {
+                    endGame();
+                } else {
+                    statusDisplay.textContent = "Wrong tile! Be careful.";
+                }
+            }
+        }
+
+        function endGame() {
+            isGameActive = false;
+            isInteractive = false;
+            playSound('lose');
+            modalTitle.textContent = "Game Over";
+            modalMessage.textContent = `You reached Level ${level} before making 3 mistakes!`;
+            resultModal.classList.remove('hidden');
+            statusDisplay.textContent = "Game Over";
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>

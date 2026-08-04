@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Play Reversi (Othello) Online Free - Tabspace Playables</title>
+    <meta name="description" content="Play classic Reversi (Othello) online for free on Tabspace Playables. Test your strategy against adjustable AI difficulty levels on desktop and mobile.">
+    <meta name="keywords" content="Reversi online, Othello game, play Reversi free, board games online, Tabspace Playables, strategic board game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/reversi-othello">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Play Reversi (Othello) Online Free - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with classic Reversi (Othello). Outflank your opponent, trap their discs, and claim victory!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/reversi-othello">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .reversi-cell {
+            background-color: #166534;
+            border: 1px solid #14532d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            user-select: none;
+            -webkit-touch-callout: none;
+            -webkit-tap-highlight-color: transparent;
+            transition: background-color 0.15s ease;
+            position: relative;
+        }
+        .reversi-cell:hover {
+            background-color: #15803d;
+        }
+        .disc {
+            width: 80%;
+            height: 80%;
+            border-radius: 50%;
+            transition: transform 0.3s ease, background-color 0.3s ease;
+        }
+        .disc.black {
+            background-color: #09090b;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+        .disc.white {
+            background-color: #f4f4f5;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        .valid-move::after {
+            content: '';
+            width: 30%;
+            height: 30%;
+            background-color: rgba(34, 197, 94, 0.6);
+            border-radius: 50%;
+            position: absolute;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-4 md:px-6 py-3 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 md:gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-12 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-base md:text-2xl font-light">/ Reversi</span>
+            </div>
+            <nav class="flex items-center gap-3 text-base">
+                <!-- Hidden on small screens using Tailwind's 'hidden md:flex' utility class -->
+                <a href="../../" class="hidden md:flex btn-card playables-hover text-white px-3 md:px-5 py-2 text-xs md:text-sm items-center">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-3 md:px-6 py-4 md:py-8 space-y-4 md:space-y-6 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <!-- Header Section with Centered Name -->
+        <div class="w-full flex flex-col items-center justify-center gap-2 md:gap-3 text-center">
+            <h1 class="text-2xl md:text-4xl tracking-tight text-white">Reversi (Othello)</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-base px-2">Black's turn. Place a disc to outflank your opponent.</p>
+        </div>
+
+        <!-- Score & Difficulty Controls -->
+        <div class="flex flex-wrap items-center justify-center gap-3 md:gap-6 bg-zinc-900/60 p-2.5 md:p-3 rounded-xl border border-zinc-800 text-xs md:text-sm">
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-zinc-900 border border-zinc-700"></span>
+                <span class="text-zinc-300">Black: <strong id="score-black" class="text-white">2</strong></span>
+            </div>
+            <div class="flex items-center gap-2">
+                <span class="inline-block w-3 h-3 md:w-4 md:h-4 rounded-full bg-zinc-100 border border-zinc-300"></span>
+                <span class="text-zinc-300">White: <strong id="score-white" class="text-white">2</strong></span>
+            </div>
+            <div class="h-4 w-[1px] bg-zinc-700 hidden sm:block"></div>
+            <div class="flex items-center gap-1.5 md:gap-2">
+                <button onclick="setDifficulty('Easy')" id="diff-Easy" class="px-2.5 md:px-3 py-1 rounded-lg text-[11px] md:text-xs bg-emerald-600 text-black font-bold transition-all">Easy</button>
+                <button onclick="setDifficulty('Medium')" id="diff-Medium" class="px-2.5 md:px-3 py-1 rounded-lg text-[11px] md:text-xs text-zinc-400 hover:text-white bg-zinc-800 transition-all">Medium</button>
+                <button onclick="setDifficulty('Hard')" id="diff-Hard" class="px-2.5 md:px-3 py-1 rounded-lg text-[11px] md:text-xs text-zinc-400 hover:text-white bg-zinc-800 transition-all">Hard</button>
+            </div>
+        </div>
+
+        <!-- Game Board Container -->
+        <div class="card-section p-3 md:p-6 bg-zinc-900/90 border border-zinc-700 shadow-xl relative overflow-hidden flex flex-col items-center justify-center w-full max-w-[500px] space-y-3 md:space-y-4">
+            <div class="overflow-x-auto w-full flex justify-center">
+                <div id="grid-container" class="grid grid-cols-8 gap-0.5 md:gap-1 select-none bg-emerald-950 p-1.5 md:p-2 rounded-lg border border-emerald-900">
+                    <!-- Dynamically generated via script -->
+                </div>
+            </div>
+            
+            <!-- Side-by-side New Game and Fullscreen Buttons -->
+            <div class="flex items-center justify-center gap-3 md:gap-4 pt-2 w-full border-t border-zinc-800">
+                <button onclick="resetGame(event)" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>New Game</span> 
+                </button>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 md:px-6 py-2 md:py-2.5 text-xs md:text-sm font-bold flex items-center gap-2 cursor-pointer">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-6 md:p-8 max-w-md w-full mx-4 text-center space-y-4 md:space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl z-50">
+                <h2 id="modal-title" class="text-xl md:text-3xl text-white tracking-wide">Game Over</h2>
+                <p id="modal-message" class="text-zinc-300 text-sm md:text-base">Final Score computed successfully!</p>
+                <div>
+                    <button onclick="closeModalAndReset(event)" class="cta-btn-green px-6 md:px-8 py-2.5 md:py-3 text-sm md:text-base w-full cursor-pointer">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-4 md:py-6 border-t border-zinc-900 text-center px-4">
+        <p class="text-[11px] md:text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-emerald-500">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'fill') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(500, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.06);
+                gainNode.gain.setValueAtTime(0.12, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const size = 8;
+        let board = [];
+        let currentPlayer = 1; // 1: Black (Player), 2: White (AI)
+        let difficulty = 'Easy';
+        let isGameActive = true;
+
+        const directions = [
+            [-1, -1], [-1, 0], [-1, 1],
+            [0, -1],           [0, 1],
+            [1, -1],  [1, 0],  [1, 1]
+        ];
+
+        const gridContainer = document.getElementById('grid-container');
+        const resultModal = document.getElementById('result-modal');
+        const gameStatus = document.getElementById('game-status');
+
+        function setDifficulty(level) {
+            playSound('click');
+            difficulty = level;
+            ['Easy', 'Medium', 'Hard'].forEach(d => {
+                const btn = document.getElementById(`diff-${d}`);
+                if (d === level) {
+                    btn.className = "px-2.5 md:px-3 py-1 rounded-lg text-[11px] md:text-xs bg-emerald-600 text-black font-bold transition-all";
+                } else {
+                    btn.className = "px-2.5 md:px-3 py-1 rounded-lg text-[11px] md:text-xs text-zinc-400 hover:text-white bg-zinc-800 transition-all";
+                }
+            });
+            resetGame();
+        }
+
+        function resetGame(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            board = Array(size).fill(null).map(() => Array(size).fill(0));
+            // Initial 4 discs
+            board[3][3] = 2;
+            board[3][4] = 1;
+            board[4][3] = 1;
+            board[4][4] = 2;
+            currentPlayer = 1;
+            isGameActive = true;
+            resultModal.classList.add('hidden');
+            gameStatus.textContent = "Black's turn. Place a disc to outflank your opponent.";
+            renderGrid();
+        }
+
+        function getFlips(r, c, player, currentBoard) {
+            if (currentBoard[r][c] !== 0) return [];
+            let opponent = player === 1 ? 2 : 1;
+            let allFlips = [];
+
+            for (let [dr, dc] of directions) {
+                let tempFlips = [];
+                let nr = r + dr;
+                let nc = c + dc;
+
+                while (nr >= 0 && nr < size && nc >= 0 && nc < size && currentBoard[nr][nc] === opponent) {
+                    tempFlips.push([nr, nc]);
+                    nr += dr;
+                    nc += dc;
+                }
+
+                if (tempFlips.length > 0 && nr >= 0 && nr < size && nc >= 0 && nc < size && currentBoard[nr][nc] === player) {
+                    allFlips = allFlips.concat(tempFlips);
+                }
+            }
+            return allFlips;
+        }
+
+        function getValidMoves(player, currentBoard) {
+            let moves = [];
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    if (getFlips(r, c, player, currentBoard).length > 0) {
+                        moves.push([r, c]);
+                    }
+                }
+            }
+            return moves;
+        }
+
+        function renderGrid() {
+            gridContainer.innerHTML = '';
+            let validMoves = isGameActive && currentPlayer === 1 ? getValidMoves(1, board) : [];
+            let validMap = {};
+            validMoves.forEach(([r, c]) => { validMap[`${r},${c}`] = true; });
+
+            let blackCount = 0;
+            let whiteCount = 0;
+
+            // Compute dynamic cell size based on screen viewport for optimal mobile display
+            let cellSizePx = window.innerWidth < 400 ? 36 : (window.innerWidth < 640 ? 40 : 42);
+
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    let cell = document.createElement('div');
+                    cell.className = "reversi-cell rounded-sm";
+                    cell.style.width = `${cellSizePx}px`;
+                    cell.style.height = `${cellSizePx}px`;
+
+                    if (board[r][c] === 1) {
+                        blackCount++;
+                        let disc = document.createElement('div');
+                        disc.className = "disc black";
+                        cell.appendChild(disc);
+                    } else if (board[r][c] === 2) {
+                        whiteCount++;
+                        let disc = document.createElement('div');
+                        disc.className = "disc white";
+                        cell.appendChild(disc);
+                    } else if (validMap[`${r},${c}`]) {
+                        cell.classList.add('valid-move');
+                    }
+
+                    cell.addEventListener('click', () => {
+                        if (!isGameActive || currentPlayer !== 1) return;
+                        makeMove(r, c);
+                    });
+
+                    gridContainer.appendChild(cell);
+                }
+            }
+
+            document.getElementById('score-black').textContent = blackCount;
+            document.getElementById('score-white').textContent = whiteCount;
+
+            if (isGameActive) {
+                if (currentPlayer === 1) {
+                    gameStatus.textContent = "Black's turn. Place a disc to outflank your opponent.";
+                } else {
+                    gameStatus.textContent = "White's turn (AI is thinking...)";
+                }
+            }
+        }
+
+        function makeMove(r, c) {
+            let flips = getFlips(r, c, currentPlayer, board);
+            if (flips.length === 0) return;
+
+            board[r][c] = currentPlayer;
+            flips.forEach(([fr, fc]) => {
+                board[fr][fc] = currentPlayer;
+            });
+
+            playSound('fill');
+            updateTurn();
+        }
+
+        function updateTurn() {
+            let nextPlayer = currentPlayer === 1 ? 2 : 1;
+            let nextMoves = getValidMoves(nextPlayer, board);
+            let currentMoves = getValidMoves(currentPlayer, board);
+
+            if (nextMoves.length > 0) {
+                currentPlayer = nextPlayer;
+            } else if (currentMoves.length > 0) {
+                // Next player has no moves, keep current player
+            } else {
+                // Game Over
+                isGameActive = false;
+                renderGrid();
+                checkWin();
+                return;
+            }
+
+            renderGrid();
+
+            if (currentPlayer === 2 && isGameActive) {
+                setTimeout(aiTurn, 500);
+            }
+        }
+
+        function aiTurn() {
+            if (!isGameActive) return;
+            let moves = getValidMoves(2, board);
+            if (moves.length === 0) {
+                currentPlayer = 1;
+                renderGrid();
+                return;
+            }
+
+            let chosenMove = moves[0];
+
+            if (difficulty === 'Easy') {
+                chosenMove = moves[Math.floor(Math.random() * moves.length)];
+            } else if (difficulty === 'Medium') {
+                // Prefer corners or prioritize more flips
+                let bestScore = -1;
+                for (let move of moves) {
+                    let [r, c] = move;
+                    let score = getFlips(r, c, 2, board).length;
+                    if ((r === 0 || r === 7) && (c === 0 || c === 7)) score += 20; // Corner weight
+                    if (score > bestScore) {
+                        bestScore = score;
+                        chosenMove = move;
+                    }
+                }
+            } else {
+                // Hard: minimax-lite / positional strategic weighting
+                const weights = [
+                    [120, -20, 20,  5,  5, 20, -20, 120],
+                    [-20, -40, -5, -5, -5, -5, -40, -20],
+                    [ 20,  -5, 15,  3,  3, 15,  -5,  20],
+                    [  5,  -5,  3,  3,  3,  3,  -5,   5],
+                    [  5,  -5,  3,  3,  3,  3,  -5,   5],
+                    [ 20,  -5, 15,  3,  3, 15,  -5,  20],
+                    [-20, -40, -5, -5, -5, -5, -40, -20],
+                    [120, -20, 20,  5,  5, 20, -20, 120]
+                ];
+                let bestVal = -9999;
+                for (let move of moves) {
+                    let [r, c] = move;
+                    let val = weights[r][c] + getFlips(r, c, 2, board).length;
+                    if (val > bestVal) {
+                        bestVal = val;
+                        chosenMove = move;
+                    }
+                }
+            }
+
+            let [ar, ac] = chosenMove;
+            let flips = getFlips(ar, ac, 2, board);
+            board[ar][ac] = 2;
+            flips.forEach(([fr, fc]) => {
+                board[fr][fc] = 2;
+            });
+
+            playSound('fill');
+            updateTurn();
+        }
+
+        function checkWin() {
+            let blackCount = 0;
+            let whiteCount = 0;
+            for (let r = 0; r < size; r++) {
+                for (let c = 0; c < size; c++) {
+                    if (board[r][c] === 1) blackCount++;
+                    if (board[r][c] === 2) whiteCount++;
+                }
+            }
+
+            let title = document.getElementById('modal-title');
+            let message = document.getElementById('modal-message');
+
+            if (blackCount > whiteCount) {
+                title.textContent = "You Win!";
+                message.textContent = `Brilliant strategy! Black: ${blackCount}, White: ${whiteCount}`;
+            } else if (whiteCount > blackCount) {
+                title.textContent = "AI Wins!";
+                message.textContent = `Better luck next time! White: ${whiteCount}, Black: ${blackCount}`;
+            } else {
+                title.textContent = "It's a Draw!";
+                message.textContent = `Equal match! Both secured ${blackCount} discs.`;
+            }
+
+        }
+
+        function closeModalAndReset(e) {
+            if (e) e.stopPropagation();
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        // Re-render grid on window resize to ensure fluid responsive sizing on mobile rotation
+        window.addEventListener('resize', () => {
+            renderGrid();
+        });
+
+        resetGame();
+    </script>
+</body>
+</html>

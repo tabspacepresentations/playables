@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Tak - Tabspace Playables</title>
+    <meta name="description" content="Play classic Tak abstract strategy connection board game online for free against the AI on Tabspace Playables on desktop and mobile.">
+    <meta name="keywords" content="Tak online, abstract strategy board game, play tak free, puzzle games online, Tabspace Playables, board game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/tak">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Tak - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Tak strategy game. Build roads, place stones, and win!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/tak">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        .tak-cell {
+            background-color: #27272a;
+            border: 1px solid #3f3f46;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.1s ease;
+        }
+        .tak-cell:hover {
+            border-color: var(--brand-orange);
+            background-color: #1e293b;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Tak</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-3 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="text-center space-y-2">
+            <h1 class="text-2xl md:text-3xl tracking-tight text-white">Tak Strategy Game</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Your turn (White Flat Stone)</p>
+        </div>
+
+        <!-- Difficulty Controls Only -->
+        <div class="flex items-center gap-2 bg-zinc-900/60 p-1.5 rounded-xl border border-zinc-800">
+            <button onclick="setDifficulty('easy')" id="btn-easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">4x4 Board (Easy)</button>
+            <button onclick="setDifficulty('medium')" id="btn-medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800">5x5 Board (Medium)</button>
+            <button onclick="setDifficulty('hard')" id="btn-hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800">6x6 Board (Hard)</button>
+        </div>
+
+        <!-- Tak Board Container -->
+        <div class="card-section p-3 bg-zinc-900/90 w-full max-w-[380px] aspect-square flex items-center justify-center">
+            <div id="tak-grid" class="w-full aspect-square grid gap-1">
+                <!-- Dynamically populated grid -->
+            </div>
+        </div>
+
+        <!-- Stone Picker Controls -->
+        <div class="flex items-center justify-center gap-2 flex-wrap bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800 text-xs">
+            <button onclick="setStoneType('flat')" id="stone-flat" class="px-3 py-1.5 rounded-lg bg-brand-green text-black font-bold">Flat Stone</button>
+            <button onclick="setStoneType('wall')" id="stone-wall" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white bg-zinc-800">Standing Stone</button>
+            <button onclick="setStoneType('cap')" id="stone-cap" class="px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white bg-zinc-800">Capstone</button>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center gap-3">
+            <button onclick="resetGame()" class="cta-btn-green px-6 py-2.5 text-sm">New Game</button>
+            <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-1.5">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-sm w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Match Concluded</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Game finished.</p>
+                <div>
+                    <button onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-3 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'place') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(500, now);
+                osc.frequency.exponentialRampToValueAtTime(300, now + 0.08);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+                osc.start(now);
+                osc.stop(now + 0.08);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        let boardSize = 4; // 4 for easy, 5 for medium, 6 for hard
+        let board = [];
+        let turn = 'white'; // 'white' (player) or 'black' (AI)
+        let selectedStoneType = 'flat'; // 'flat', 'wall', 'cap'
+        let isGameActive = true;
+
+        const takGrid = document.getElementById('tak-grid');
+        const statusDisplay = document.getElementById('game-status');
+        const resultModal = document.getElementById('result-modal');
+        const modalTitle = document.getElementById('modal-title');
+        const modalMessage = document.getElementById('modal-message');
+
+        function setDifficulty(level) {
+            playSound('click');
+            if (level === 'easy') boardSize = 4;
+            else if (level === 'medium') boardSize = 5;
+            else boardSize = 6;
+
+            ['easy', 'medium', 'hard'].forEach(lvl => {
+                const btn = document.getElementById(`btn-${lvl}`);
+                if (lvl === level) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800";
+                }
+            });
+
+            resetGame();
+        }
+
+        function setStoneType(type) {
+            playSound('click');
+            selectedStoneType = type;
+            ['flat', 'wall', 'cap'].forEach(t => {
+                const btn = document.getElementById(`stone-${t}`);
+                if (t === type) {
+                    btn.className = "px-3 py-1.5 rounded-lg bg-brand-green text-black font-bold";
+                } else {
+                    btn.className = "px-3 py-1.5 rounded-lg text-zinc-400 hover:text-white bg-zinc-800";
+                }
+            });
+        }
+
+        function resetGame() {
+            playSound('click');
+            isGameActive = true;
+            turn = 'white';
+            board = [];
+            for (let r = 0; r < boardSize; r++) {
+                let row = [];
+                for (let c = 0; c < boardSize; c++) {
+                    row.push([]); // Stack of stones
+                }
+                board.push(row);
+            }
+
+            takGrid.className = `w-full aspect-square grid grid-cols-${boardSize} gap-1`;
+            renderBoard();
+            statusDisplay.textContent = "Your turn (White)";
+        }
+
+        function renderBoard() {
+            takGrid.innerHTML = '';
+            for (let r = 0; r < boardSize; r++) {
+                for (let c = 0; c < boardSize; c++) {
+                    let cell = document.createElement('div');
+                    cell.className = "tak-cell rounded-lg";
+                    let stack = board[r][c];
+
+                    if (stack.length > 0) {
+                        let top = stack[stack.length - 1];
+                        let colorIndicator = top.player === 'white' ? 'text-zinc-100 bg-zinc-800 border-zinc-600' : 'text-amber-500 bg-zinc-950 border-zinc-800';
+                        let symbol = top.type === 'flat' ? '■' : (top.type === 'wall' ? '▲' : '★');
+                        cell.className += ` ${colorIndicator} border`;
+                        cell.innerHTML = `<span class="text-xs md:text-sm font-bold">${symbol}</span>`;
+                    } else {
+                        cell.textContent = "";
+                    }
+
+                    let currentR = r, currentC = c;
+                    cell.onclick = () => handleCellClick(currentR, currentC);
+                    takGrid.appendChild(cell);
+                }
+            }
+        }
+
+        function handleCellClick(r, c) {
+            if (!isGameActive || turn !== 'white') return;
+
+            let stack = board[r][c];
+            if (stack.length === 0) {
+                // Place new stone
+                stack.push({ player: 'white', type: selectedStoneType });
+                playSound('place');
+                renderBoard();
+                checkWinConditions();
+
+                if (isGameActive) {
+                    turn = 'black';
+                    statusDisplay.textContent = "Computer is thinking...";
+                    setTimeout(aiTurn, 600);
+                }
+            } else {
+                statusDisplay.textContent = "Square occupied! Choose an empty square to place a stone.";
+            }
+        }
+
+        function aiTurn() {
+            if (!isGameActive) return;
+
+            let emptyCells = [];
+            for (let r = 0; r < boardSize; r++) {
+                for (let c = 0; c < boardSize; c++) {
+                    if (board[r][c].length === 0) {
+                        emptyCells.push({ r, c });
+                    }
+                }
+            }
+
+            if (emptyCells.length > 0) {
+                let cell = emptyCells[Math.floor(Math.random() * emptyCells.length)];
+                let stoneTypes = ['flat', 'wall'];
+                let type = stoneTypes[Math.floor(Math.random() * stoneTypes.length)];
+                board[cell.r][cell.c].push({ player: 'black', type: type });
+                playSound('place');
+            }
+
+            renderBoard();
+            checkWinConditions();
+
+            if (isGameActive) {
+                turn = 'white';
+                statusDisplay.textContent = "Your turn (White)";
+            }
+        }
+
+        function checkWinConditions() {
+            // Simple check: if board is full or road connection approximation
+            let totalStones = 0;
+            for (let r = 0; r < boardSize; r++) {
+                for (let c = 0; c < boardSize; c++) {
+                    if (board[r][c].length > 0) totalStones++;
+                }
+            }
+
+            if (totalStones >= boardSize * boardSize) {
+                isGameActive = false;
+                playSound('win');
+                modalTitle.textContent = "Match Concluded!";
+                modalMessage.textContent = "The Tak board is full! Great strategy match.";
+                resultModal.classList.remove('hidden');
+                statusDisplay.textContent = "Match Ended";
+            }
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            resetGame();
+        }
+
+        setDifficulty('easy');
+    </script>
+</body>
+</html>

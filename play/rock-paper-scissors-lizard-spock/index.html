@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Rock Paper Scissors Lizard Spock - Tabspace Playables</title>
+    <meta name="description" content="Play classic Rock Paper Scissors Lizard Spock extended hand game online for free against the AI with score tracking on Tabspace Playables on desktop and mobile.">
+    <meta name="keywords" content="Rock Paper Scissors Lizard Spock online, big bang theory game, play rpsls free, puzzle games online, Tabspace Playables, casual game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/rock-paper-scissors-lizard-spock">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Rock Paper Scissors Lizard Spock - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with classic Rock Paper Scissors Lizard Spock. Choose your sign, beat the dealer, and win!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/rock-paper-scissors-lizard-spock">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+            touch-action: manipulation;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            pointer-events: auto;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 1rem;
+        }
+
+        .rpsls-choice-btn {
+            background-color: #27272a;
+            border: 2px solid #3f3f46;
+            border-radius: 12px;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .rpsls-choice-btn:hover {
+            border-color: var(--brand-orange);
+            background-color: #1e293b;
+            transform: translateY(-4px);
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-4 md:px-6 py-3 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-2 md:gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-12 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-base md:text-2xl font-light">/ RPSLS</span>
+            </div>
+            <nav class="flex items-center gap-3 text-base">
+                <a href="../../" class="hidden md:flex btn-card playables-hover text-white px-3 md:px-5 py-2 text-xs md:text-sm items-center">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-3 md:px-6 py-4 md:py-8 space-y-4 md:space-y-6 max-w-xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <div class="w-full flex flex-col items-center justify-center gap-2 text-center">
+            <h1 class="text-xl md:text-3xl tracking-tight text-white">Rock Paper Scissors Lizard Spock</h1>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm px-2">Scissors cuts paper, paper covers rock, rock crushes lizard, lizard poisons Spock, Spock smashes scissors, scissors decapitates lizard, lizard eats paper, paper disproves Spock, Spock vaporizes rock, and as it always has, rock crushes scissors.</p>
+        </div>
+
+        <!-- Score Stats Bar -->
+        <div class="flex justify-around w-full max-w-[380px] text-xs md:text-sm text-zinc-300 bg-zinc-900/60 p-3 rounded-xl border border-zinc-800">
+            <span>You: <strong id="score-player" class="text-emerald-400">0</strong></span>
+            <span>Ties: <strong id="score-ties" class="text-zinc-400">0</strong></span>
+            <span>AI: <strong id="score-ai" class="text-orange-400">0</strong></span>
+        </div>
+
+        <!-- Battle Arena Container -->
+        <div class="card-section p-4 md:p-6 bg-zinc-900/90 border border-zinc-700 shadow-xl w-full max-w-[380px] flex flex-col items-center justify-center space-y-4">
+            <div class="flex justify-between w-full text-center px-4">
+                <div class="space-y-1">
+                    <span class="text-[10px] text-zinc-500 uppercase tracking-wider block">You</span>
+                    <div id="player-display" class="w-16 h-16 bg-zinc-800 border border-zinc-700 rounded-xl flex items-center justify-center text-2xl">❓</div>
+                </div>
+                <div class="flex items-center justify-center text-zinc-500 font-bold text-lg">VS</div>
+                <div class="space-y-1">
+                    <span class="text-[10px] text-zinc-500 uppercase tracking-wider block">AI Dealer</span>
+                    <div id="ai-display" class="w-16 h-16 bg-zinc-800 border border-zinc-700 rounded-xl flex items-center justify-center text-2xl">❓</div>
+                </div>
+            </div>
+            <div id="round-result" class="text-sm md:text-base font-bold text-white min-h-[24px] text-center">Choose your sign!</div>
+        </div>
+
+        <!-- Choice Buttons Panel -->
+        <div class="flex gap-2.5 justify-center pt-2 flex-wrap max-w-[400px]">
+            <button onclick="playRound('rock')" class="rpsls-choice-btn" title="Rock">✊</button>
+            <button onclick="playRound('paper')" class="rpsls-choice-btn" title="Paper">✋</button>
+            <button onclick="playRound('scissors')" class="rpsls-choice-btn" title="Scissors">✌️</button>
+            <button onclick="playRound('lizard')" class="rpsls-choice-btn" title="Lizard">🦎</button>
+            <button onclick="playRound('spock')" class="rpsls-choice-btn" title="Spock">🖖</button>
+        </div>
+
+        <!-- Action Controls -->
+        <div class="flex items-center justify-center gap-3 pt-2 w-full max-w-[380px]">
+            <button onclick="resetStats()" class="btn-card playables-hover text-zinc-400 px-4 py-2 text-xs font-bold cursor-pointer">Reset Score</button>
+            <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs font-bold flex items-center gap-1.5 cursor-pointer">
+                <span>Fullscreen</span> ⛶
+            </button>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-2 md:my-4 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-4 md:py-6 border-t border-zinc-900 text-center px-4">
+        <p class="text-[11px] md:text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-emerald-500">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(600, now + 0.05);
+                gainNode.gain.setValueAtTime(0.08, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+                osc.start(now);
+                osc.stop(now + 0.05);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            } else if (type === 'lose') {
+                osc.type = 'sawtooth';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.exponentialRampToValueAtTime(100, now + 0.3);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
+                osc.start(now);
+                osc.stop(now + 0.3);
+            }
+        }
+
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        let playerScore = 0;
+        let aiScore = 0;
+        let tieScore = 0;
+
+        const emojis = {
+            rock: '✊',
+            paper: '✋',
+            scissors: '✌️',
+            lizard: '🦎',
+            spock: '🖖'
+        };
+
+        const winningRules = {
+            rock: ['scissors', 'lizard'],
+            paper: ['rock', 'spock'],
+            scissors: ['paper', 'lizard'],
+            lizard: ['spock', 'paper'],
+            spock: ['scissors', 'rock']
+        };
+
+        function playRound(playerChoice) {
+            playSound('click');
+            const choices = ['rock', 'paper', 'scissors', 'lizard', 'spock'];
+            const aiChoice = choices[Math.floor(Math.random() * choices.length)];
+
+            document.getElementById('player-display').textContent = emojis[playerChoice];
+            document.getElementById('ai-display').textContent = emojis[aiChoice];
+
+            const resultEl = document.getElementById('round-result');
+
+            if (playerChoice === aiChoice) {
+                tieScore++;
+                resultEl.textContent = "It's a Tie!";
+                resultEl.className = "text-sm md:text-base font-bold text-zinc-400 min-h-[24px] text-center";
+            } else if (winningRules[playerChoice].includes(aiChoice)) {
+                playerScore++;
+                resultEl.textContent = "You Win This Round!";
+                resultEl.className = "text-sm md:text-base font-bold text-emerald-400 min-h-[24px] text-center";
+                playSound('win');
+            } else {
+                aiScore++;
+                resultEl.textContent = "AI Wins This Round!";
+                resultEl.className = "text-sm md:text-base font-bold text-orange-400 min-h-[24px] text-center";
+                playSound('lose');
+            }
+
+            document.getElementById('score-player').textContent = playerScore;
+            document.getElementById('score-ties').textContent = tieScore;
+            document.getElementById('score-ai').textContent = aiScore;
+        }
+
+        function resetStats() {
+            playSound('click');
+            playerScore = 0;
+            aiScore = 0;
+            tieScore = 0;
+            document.getElementById('score-player').textContent = playerScore;
+            document.getElementById('score-ties').textContent = tieScore;
+            document.getElementById('score-ai').textContent = aiScore;
+            document.getElementById('player-display').textContent = '❓';
+            document.getElementById('ai-display').textContent = '❓';
+            document.getElementById('round-result').textContent = "Choose your sign!";
+            document.getElementById('round-result').className = "text-sm md:text-base font-bold text-white min-h-[24px] text-center";
+        }
+    </script>
+</body>
+</html>

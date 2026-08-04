@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    
+    <!-- SEO Meta Tags -->
+    <title>Tower of Hanoi - Tabspace Playables</title>
+    <meta name="description" content="Play classic Tower of Hanoi puzzle game online for free with adjustable difficulty on Tabspace Playables on desktop and mobile.">
+    <meta name="keywords" content="Tower of Hanoi online, disc stacking game, play tower of hanoi free, puzzle games online, Tabspace Playables, logic game">
+    <link rel="canonical" href="https://tabspacepresentations.com/playables/play/tower-of-hanoi">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Tower of Hanoi - Tabspace Playables">
+    <meta property="og:description" content="Challenge yourself with the classic Tower of Hanoi puzzle. Move disks between rods and win!">
+    <meta property="og:url" content="https://tabspacepresentations.com/playables/play/tower-of-hanoi">
+    <meta property="og:type" content="website">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        /* Modal Overlay Animation */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(4px);
+            transition: opacity 0.3s ease;
+        }
+
+        /* Ensures native full-screen mode covers background properly with theme colors */
+        #game-container:fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-webkit-full-screen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+        #game-container:-ms-fullscreen {
+            background-color: #1a1a1a;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 2rem;
+        }
+    </style>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <div class="flex items-center gap-3 select-none">
+                <div onclick="playSound('click')" class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo">
+                    <img src="../../images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Tower of Hanoi</span>
+            </div>
+            <nav class="hidden md:flex items-center gap-3 text-base">
+                <a href="../../" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Back to Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-3 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <main id="game-container" class="w-full px-6 py-6 space-y-4 max-w-4xl mx-auto flex-grow flex flex-col items-center justify-center relative bg-zinc-950">
+        
+        <!-- Header Section with Centered Name and Fullscreen next to it -->
+        <div class="w-full flex flex-col items-center justify-center gap-2 text-center">
+            <div class="flex items-center gap-4">
+                <h1 class="text-2xl md:text-3xl tracking-tight text-white">Tower of Hanoi Puzzle</h1>
+                <button onclick="toggleFullscreen()" id="fullscreen-btn" class="btn-card playables-hover text-white px-4 py-2 text-xs md:text-sm flex items-center gap-2">
+                    <span>Fullscreen</span> ⛶
+                </button>
+            </div>
+            <p id="game-status" class="text-zinc-400 text-xs md:text-sm">Moves: <span id="moves-display" class="text-brand-green font-bold text-base">0</span> | Click a rod to select/move top disk!</p>
+        </div>
+
+        <!-- Difficulty Selection & Action Controls -->
+        <div class="flex flex-wrap items-center justify-center gap-2 bg-zinc-900/60 p-2.5 rounded-xl border border-zinc-800">
+            <button onclick="setDifficulty(4, 'Easy')" id="diff-Easy" class="px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold">Easy (4 Disks)</button>
+            <button onclick="setDifficulty(5, 'Medium')" id="diff-Medium" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800">Medium (5 Disks)</button>
+            <button onclick="setDifficulty(6, 'Hard')" id="diff-Hard" class="px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800">Hard (6 Disks)</button>
+        </div>
+
+        <!-- Game Canvas Area -->
+        <div class="card-section p-4 bg-zinc-900/90 border border-zinc-700 shadow-xl relative overflow-hidden flex items-center justify-center w-full max-w-[740px]">
+            <canvas id="gameCanvas" width="700" height="380" class="rounded-lg bg-zinc-950 border border-zinc-800 shadow-inner block cursor-pointer w-full h-auto"></canvas>
+        </div>
+
+        <!-- RESULT POPUP MODAL -->
+        <div id="result-modal" class="absolute inset-0 z-50 flex items-center justify-center modal-backdrop hidden rounded-xl">
+            <div class="card-section p-8 max-w-md w-full mx-4 text-center space-y-6 bg-zinc-900 border border-zinc-700 shadow-2xl">
+                <h2 id="modal-title" class="text-2xl md:text-3xl text-white tracking-wide">Puzzle Solved!</h2>
+                <p id="modal-message" class="text-zinc-300 text-base">Completed in <span id="final-moves" class="font-bold text-brand-green">0</span> moves!</p>
+                <div>
+                    <button onclick="closeModalAndReset()" class="cta-btn-green px-8 py-3 text-base w-full">Play Again</button>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER AD BANNER SLOT -->
+    <div class="w-full flex flex-col items-center justify-center my-3 px-4">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[60px] md:min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-xs md:text-sm overflow-hidden">
+            <span>Horizontal Banner Ad (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="py-6 border-t border-zinc-900 text-center">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- GAME LOGIC & AUDIO SCRIPT -->
+    <script>
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+        function playSound(type) {
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+            const osc = audioCtx.createOscillator();
+            const gainNode = audioCtx.createGain();
+            osc.connect(gainNode);
+            gainNode.connect(audioCtx.destination);
+            let now = audioCtx.currentTime;
+
+            if (type === 'click' || type === 'select') {
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(400, now);
+                osc.frequency.exponentialRampToValueAtTime(700, now + 0.06);
+                gainNode.gain.setValueAtTime(0.1, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+                osc.start(now);
+                osc.stop(now + 0.06);
+            } else if (type === 'move') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(500, now);
+                osc.frequency.setValueAtTime(800, now + 0.1);
+                gainNode.gain.setValueAtTime(0.15, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.15);
+                osc.start(now);
+                osc.stop(now + 0.15);
+            } else if (type === 'win') {
+                osc.type = 'triangle';
+                osc.frequency.setValueAtTime(300, now);
+                osc.frequency.setValueAtTime(450, now + 0.1);
+                osc.frequency.setValueAtTime(600, now + 0.2);
+                osc.frequency.setValueAtTime(900, now + 0.3);
+                gainNode.gain.setValueAtTime(0.2, now);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, now + 0.5);
+                osc.start(now);
+                osc.stop(now + 0.5);
+            }
+        }
+
+        // Fullscreen Toggle Logic
+        function toggleFullscreen() {
+            playSound('click');
+            const elem = document.getElementById('game-container');
+            if (!document.fullscreenElement) {
+                if (elem.requestFullscreen) elem.requestFullscreen();
+                else if (elem.webkitRequestFullscreen) elem.webkitRequestFullscreen();
+                else if (elem.msRequestFullscreen) elem.msRequestFullscreen();
+            } else {
+                if (document.exitFullscreen) document.exitFullscreen();
+                else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+                else if (document.msExitFullscreen) document.msExitFullscreen();
+            }
+        }
+
+        document.addEventListener("fullscreenchange", () => {
+            const btn = document.getElementById('fullscreen-btn');
+            if (document.fullscreenElement) {
+                btn.innerHTML = "<span>Exit</span> 🗗";
+            } else {
+                btn.innerHTML = "<span>Fullscreen</span> ⛶";
+            }
+        });
+
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+
+        let numDisks = 4;
+        let currentDifficultyName = 'Easy';
+        let rods = [[], [], []];
+        let selectedRod = null;
+        let moves = 0;
+        let isGameActive = true;
+
+        const DISK_COLORS = ['#ef4444', '#f97316', '#eab308', '#22c55e', '#3b82f6', '#a855f7'];
+
+        const movesDisplay = document.getElementById('moves-display');
+        const resultModal = document.getElementById('result-modal');
+        const finalMovesDisplay = document.getElementById('final-moves');
+
+        function setDifficulty(count, name) {
+            playSound('click');
+            numDisks = count;
+            currentDifficultyName = name;
+            ['Easy', 'Medium', 'Hard'].forEach(d => {
+                const btn = document.getElementById(`diff-${d}`);
+                if (d === name) {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm bg-brand-green text-black transition-all font-bold";
+                } else {
+                    btn.className = "px-4 py-1.5 rounded-lg text-xs md:text-sm text-zinc-400 hover:text-white transition-all bg-zinc-800";
+                }
+            });
+            resetGame();
+        }
+
+        function resetGame() {
+            rods = [[], [], []];
+            for (let i = numDisks; i >= 1; i--) {
+                rods[0].push(i);
+            }
+            selectedRod = null;
+            moves = 0;
+            isGameActive = true;
+            resultModal.classList.add('hidden');
+            updateUI();
+            render();
+        }
+
+        function updateUI() {
+            movesDisplay.textContent = moves;
+        }
+
+        const rodXCoordinates = [135, 350, 565];
+
+        canvas.addEventListener('click', (e) => {
+            if (!isGameActive) return;
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const clickX = (e.clientX - rect.left) * scaleX;
+
+            let clickedRod = -1;
+            if (clickX < 240) clickedRod = 0;
+            else if (clickX < 470) clickedRod = 1;
+            else clickedRod = 2;
+
+            if (selectedRod === null) {
+                if (rods[clickedRod].length > 0) {
+                    selectedRod = clickedRod;
+                    playSound('select');
+                    render();
+                }
+            } else {
+                if (selectedRod === clickedRod) {
+                    selectedRod = null;
+                    playSound('click');
+                    render();
+                } else {
+                    let sourceDisk = rods[selectedRod][rods[selectedRod].length - 1];
+                    let targetTopDisk = rods[clickedRod].length > 0 ? rods[clickedRod][rods[clickedRod].length - 1] : 999;
+
+                    if (sourceDisk < targetTopDisk) {
+                        rods[selectedRod].pop();
+                        rods[clickedRod].push(sourceDisk);
+                        moves++;
+                        playSound('move');
+                        updateUI();
+
+                        if (rods[2].length === numDisks) {
+                            isGameActive = false;
+                            playSound('win');
+                            finalMovesDisplay.textContent = moves;
+                            resultModal.classList.remove('hidden');
+                        }
+                    } else {
+                        playSound('click');
+                    }
+                    selectedRod = null;
+                    render();
+                }
+            }
+        });
+
+        function render() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Draw base platform
+            ctx.fillStyle = '#3f3f46';
+            ctx.fillRect(45, 320, 610, 14);
+
+            // Draw rods
+            rodXCoordinates.forEach((rx, idx) => {
+                ctx.fillStyle = '#52525b';
+                ctx.fillRect(rx - 7, 100, 14, 220);
+
+                // Rod labels
+                ctx.fillStyle = '#a1a1aa';
+                ctx.font = '15px sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillText(`Rod ${idx + 1}`, rx, 355);
+            });
+
+            // Draw disks
+            rods.forEach((rod, rodIdx) => {
+                let rx = rodXCoordinates[rodIdx];
+                rod.forEach((diskSize, diskIdx) => {
+                    let w = 30 + diskSize * 24;
+                    let h = 18;
+                    let x = rx - w / 2;
+                    let y = 302 - (diskIdx * 20);
+
+                    if (selectedRod === rodIdx && diskIdx === rod.length - 1) {
+                        ctx.strokeStyle = '#ff6D00';
+                        ctx.lineWidth = 3;
+                    } else {
+                        ctx.strokeStyle = 'transparent';
+                        ctx.lineWidth = 0;
+                    }
+
+                    ctx.fillStyle = DISK_COLORS[diskSize - 1];
+                    ctx.beginPath();
+                    ctx.roundRect(x, y, w, h, 6);
+                    ctx.fill();
+                    if (ctx.lineWidth > 0) ctx.stroke();
+                });
+            });
+        }
+
+        function closeModalAndReset() {
+            playSound('click');
+            resultModal.classList.add('hidden');
+            setDifficulty(numDisks, currentDifficultyName);
+        }
+
+        resetGame();
+    </script>
+</body>
+</html>
