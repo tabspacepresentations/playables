@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tabspace Playables - Interactive Browser Games & HTML5 Puzzles</title>
+    
+    <!-- SEO Meta Tags -->
+    <meta name="description" content="Explore interactive browser games, HTML5 puzzles, Tic Tac Toe, Sudoku, and strategy challenges directly in your viewport at Tabspace Playables.">
+    <meta name="keywords" content="Tabspace Playables, Tic Tac Toe, Sudoku, Gomoku, Browser Games, HTML5 Games, Free Online Games, Strategy Puzzles">
+    <meta name="author" content="Tabspace Presentations">
+    <link rel="canonical" href="https://www.tabspacepresentations.com/playables/">
+
+    <!-- Open Graph / Social Media Meta Tags -->
+    <meta property="og:title" content="Tabspace Playables - Free Browser Games & HTML5 Puzzles">
+    <meta property="og:description" content="Dive into lightweight, high-performance browser games built directly into your viewport environment.">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.tabspacepresentations.com/playables/">
+    <meta property="og:image" content="https://www.tabspacepresentations.com/images/logo.png">
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Tabspace Playables - Free Browser Games">
+    <meta name="twitter:description" content="Explore interactive browser games, HTML5 puzzles, and strategy challenges.">
+    <meta name="twitter:image" content="https://www.tabspacepresentations.com/images/logo.png">
+
+    <!-- Schema.org Structured Data (JSON-LD) for SEO -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "Tabspace Playables",
+      "description": "Interactive browser games, HTML5 puzzles, and strategy challenges.",
+      "url": "https://www.tabspacepresentations.com/playables/",
+      "publisher": {
+        "@type": "Organization",
+        "name": "Tabspace Presentations",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://www.tabspacepresentations.com/images/logo.png"
+        }
+      },
+      "hasPart": [
+        {
+          "@type": "WebApplication",
+          "name": "Tic Tac Toe",
+          "url": "https://www.tabspacepresentations.com/playables/play/tic-tac-toe/",
+          "applicationCategory": "GameApplication"
+        },
+        {
+          "@type": "WebApplication",
+          "name": "Sudoku",
+          "url": "https://www.tabspacepresentations.com/playables/play/sudoku/",
+          "applicationCategory": "GameApplication"
+        },
+        {
+          "@type": "WebApplication",
+          "name": "Gomoku",
+          "url": "https://www.tabspacepresentations.com/playables/play/gomoku/",
+          "applicationCategory": "GameApplication"
+        }
+      ]
+    }
+    </script>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            orange: '#ff6D00',
+                            green: '#22c55e'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-calisto {
+            font-family: 'Calisto MT', 'Bookman Old Style', Georgia, serif;
+        }
+
+        :root {
+            --bg-main: #1a1a1a;
+            --bg-card: #2a2a2a;
+            --border-color: #333333;
+            --text-main: #eff1f5;
+            --text-muted: #9ca3af;
+            --accent-green: #22c55e;
+            --glow-orange: #ff6D00;
+        }
+
+        /* Global Font Weight */
+        * {
+            font-weight: 700 !important;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            letter-spacing: 0.025em;
+        }
+
+        /* Fixed offset for section anchor scrolling */
+        section[id] {
+            scroll-margin-top: 140px;
+        }
+
+        /* Base Card Styles */
+        .card-section, .btn-card {
+            background-color: rgba(39, 39, 42, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* HERO HOVER: Glow & border turn GREEN (#22c55e), typing text turns #ff6D00 on hover, description text color stays fixed */
+        .hero-hover {
+            transition: all 0.25s ease-in-out;
+        }
+        .hero-hover:hover #typed-text {
+            color: #ff6D00 !important;
+        }
+        .hero-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        /* PLAYABLES HOVER (INVERTED): Border and glow turn GREEN (#22c55e) */
+        .playables-hover {
+            transition: all 0.25s ease-in-out;
+        }
+        .playables-hover:hover {
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 16px 2px rgba(34, 197, 94, 0.45) !important;
+        }
+
+        /* Image Zoom Effect on Card Hover */
+        .playables-hover:hover img {
+            transform: scale(1.05);
+        }
+
+        /* High-Conversion CTA Buttons */
+        .cta-btn-green {
+            background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+            color: #000000 !important;
+            border: 1px solid #22c55e;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(34, 197, 94, 0.35);
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-btn-green:hover {
+            background: #121212 !important;
+            color: var(--glow-orange) !important;
+            border-color: var(--accent-green) !important;
+            box-shadow: 0 0 22px 4px rgba(34, 197, 94, 0.6) !important;
+            transform: translateY(-2px) scale(1.03);
+        }
+
+        .arrow {
+            display: inline-block;
+            transition: transform 0.2s ease, color 0.25s ease;
+            color: #000000 !important;
+        }
+
+        .cta-btn-green:hover .arrow {
+            color: var(--glow-orange) !important;
+            transform: translateX(4px);
+        }
+
+        /* Typing Cursor Effect */
+        .typing-cursor {
+            display: inline-block;
+            width: 3px;
+            background-color: #22c55e;
+            animation: blink 0.7s infinite;
+            margin-left: 2px;
+            vertical-align: middle;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--border-color);
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--glow-orange);
+        }
+    </style>
+
+    <!-- Global problem/game array initialization -->
+    <script>
+        window.numGames = [];
+        window.aGames = [];
+        window.bGames = [];
+        window.cGames = [];
+        window.dGames = [];
+        window.eGames = [];
+        window.fGames = [];
+        window.gGames = [];
+        window.hGames = [];
+        window.iGames = [];
+        window.jGames = [];
+        window.kGames = [];
+        window.lGames = [];
+        window.mGames = [];
+        window.nGames = [];
+        window.oGames = [];
+        window.pGames = [];
+        window.qGames = [];
+        window.rGames = [];
+        window.sGames = [];
+        window.tGames = [];
+        window.uGames = [];
+        window.vGames = [];
+        window.wGames = [];
+        window.xGames = [];
+        window.yGames = [];
+        window.zGames = [];
+    </script>
+
+    <!-- Game List Script Tags from 'names' folder -->
+    <script src="./names/games.js"></script>
+</head>
+<body class="bg-zinc-950 text-zinc-100 font-calisto antialiased min-h-screen selection:bg-brand-orange selection:text-black flex flex-col justify-between">
+
+    <!-- DEEP BLACK STICKY HEADER -->
+    <header class="sticky top-0 z-50 bg-black border-b border-zinc-900 px-6 py-4 transition-all">
+        <div class="w-full flex items-center justify-between gap-4">
+            <!-- Logo Container with matching font style -->
+            <div class="flex items-center gap-3 select-none">
+                <div class="flex items-center shrink-0 py-1 group cursor-pointer" aria-label="Tabspace Playables Logo Container">
+                    <img src="./images/logo.png" alt="Tabspace Presentations Logo" class="h-16 md:h-20 w-auto object-contain block opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-300" />
+                </div>
+                <span class="text-zinc-500 text-lg md:text-2xl font-light">/ Playables</span>
+            </div>
+
+            <!-- Navigation Links -->
+            <nav class="hidden md:flex items-center gap-3 text-base" aria-label="Main Navigation">
+                <a href="#featured" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">Featured</a>
+                <a href="#all-playables" class="btn-card playables-hover text-white px-5 py-2.5 text-sm">All Playables</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- HEADER AD SLOT 1 (Top Leaderboard) -->
+    <div class="w-full flex flex-col items-center justify-center pt-6 px-6">
+        <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+        <div class="w-full max-w-[728px] min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-sm overflow-hidden">
+            <!-- Insert Banner Ad Code Here (728x90) -->
+            <span>Horizontal Banner Ad Slot (728 × 90)</span>
+        </div>
+    </div>
+
+    <!-- EXPANDED MAIN CONTAINER -->
+    <main class="w-full px-6 py-8 space-y-12 max-w-[1400px] mx-auto flex-grow">
+
+        <!-- HERO SECTION WITH TYPING ANIMATION -->
+        <section class="card-section hero-hover p-8 md:p-14 text-center flex flex-col items-center justify-center space-y-6">
+            <h1 class="text-3xl md:text-5xl lg:text-6xl tracking-tight leading-tight">
+                <span style="color: #ffffff;">Welcome to</span> <span style="color: #ff6D00;">Tabspace</span> <span style="color: #22c55e;">Playables</span>
+            </h1>
+            <div class="text-xl md:text-3xl text-zinc-300 font-medium h-12 flex items-center justify-center">
+                <span id="typed-text" class="text-zinc-300 transition-colors duration-200"></span><span class="typing-cursor" id="typed-cursor">&nbsp;</span>
+            </div>
+            <p class="text-zinc-400 text-sm md:text-base max-w-2xl">
+                Dive into lightweight, high-performance browser games built directly into your viewport environment.
+            </p>
+        </section>
+
+        <!-- POST-HERO AD SLOT 2 -->
+        <div class="w-full flex flex-col items-center justify-center my-6">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+            <div class="w-full max-w-[728px] min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-sm overflow-hidden">
+                <!-- Insert Banner Ad Code Here (728x90) -->
+                <span>Horizontal Banner Ad Slot (728 × 90)</span>
+            </div>
+        </div>
+
+        <!-- FEATURED PLAYABLES SECTION -->
+        <section id="featured" class="space-y-6 scroll-mt-36">
+            <div class="border-b border-[#333333] pb-3">
+                <h2 class="text-2xl text-white tracking-wide">Featured Playables</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <!-- Tic Tac Toe Card -->
+                <div class="searchable-item card-section playables-hover overflow-hidden flex flex-col group" data-name="tic tac toe">
+                    <div class="aspect-video w-full bg-gradient-to-br from-green-950/30 via-[#1a1a1a] to-black relative flex items-center justify-center overflow-hidden border-b border-[#333333]">
+                        <img src="./images/tic-tac-toe.png" alt="Tic Tac Toe" class="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-300" />
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div class="flex items-center justify-between gap-4">
+                            <h3 class="text-xl text-white tracking-wide">Tic Tac Toe</h3>
+                            <a href="play/tic-tac-toe/" class="cta-btn-green inline-flex items-center gap-2 px-4 py-2 text-sm shrink-0">
+                                Play <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sudoku Card -->
+                <div class="searchable-item card-section playables-hover overflow-hidden flex flex-col group" data-name="sudoku">
+                    <div class="aspect-video w-full bg-gradient-to-br from-green-950/30 via-[#1a1a1a] to-black relative flex items-center justify-center overflow-hidden border-b border-[#333333]">
+                        <img src="./images/sudoku.png" alt="Sudoku" class="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-300" />
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div class="flex items-center justify-between gap-4">
+                            <h3 class="text-xl text-white tracking-wide">Sudoku</h3>
+                            <a href="play/sudoku/" class="cta-btn-green inline-flex items-center gap-2 px-4 py-2 text-sm shrink-0">
+                                Play <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Gomoku Card -->
+                <div class="searchable-item card-section playables-hover overflow-hidden flex flex-col group" data-name="gomoku">
+                    <div class="aspect-video w-full bg-gradient-to-br from-green-950/30 via-[#1a1a1a] to-black relative flex items-center justify-center overflow-hidden border-b border-[#333333]">
+                        <img src="./images/gomoku.png" alt="Gomoku" class="absolute inset-0 w-full h-full object-cover opacity-80 transition-transform duration-300" />
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div class="flex items-center justify-between gap-4">
+                            <h3 class="text-xl text-white tracking-wide">Gomoku</h3>
+                            <a href="play/gomoku/" class="cta-btn-green inline-flex items-center gap-2 px-4 py-2 text-sm shrink-0">
+                                Play <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- MID-PAGE IN-FEED AD SLOT 3 -->
+        <div class="w-full flex flex-col items-center justify-center my-6">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+            <div class="w-full max-w-[728px] min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-sm overflow-hidden">
+                <!-- Insert Banner Ad Code Here (728x90) -->
+                <span>Horizontal Banner Ad Slot (728 × 90)</span>
+            </div>
+        </div>
+
+        <!-- SEARCH BAR SECTION (MOVED DIRECTLY ABOVE ALL PLAYABLES) -->
+        <section class="max-w-xl mx-auto pt-4">
+            <div class="relative">
+                <input type="text" id="game-search" placeholder="Search playables (e.g., Tic Tac Toe, Sudoku, Gomoku)..." class="w-full bg-[#2a2a2a] border border-[#333333] text-white placeholder-zinc-500 rounded-xl px-5 py-3.5 focus:outline-none focus:border-brand-green transition-colors shadow-inner" oninput="filterPlayables()">
+            </div>
+        </section>
+
+        <!-- ALL PLAYABLES SECTION (TWO COLUMNS, LOAD MORE MECHANISM) -->
+        <section id="all-playables" class="space-y-6 scroll-mt-36">
+            <div class="border-b border-[#333333] pb-3">
+                <h2 class="text-2xl text-white tracking-wide">All Playables</h2>
+            </div>
+
+            <!-- Two Column Grid for Dynamic Batch Loading -->
+            <div id="playables-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Dynamically populated from JS files -->
+            </div>
+
+            <!-- Load More Button -->
+            <div id="load-more-container" class="text-center pt-6">
+                <button onclick="loadMorePlayables()" class="cta-btn-green px-8 py-3.5 text-base active:scale-95">
+                    Load More Playables <span class="arrow">↓</span>
+                </button>
+            </div>
+        </section>
+
+        <!-- FOOTER AD SLOT 4 -->
+        <div class="w-full flex flex-col items-center justify-center my-6">
+            <span class="text-[10px] text-zinc-500 uppercase tracking-widest mb-1">Advertisement</span>
+            <div class="w-full max-w-[728px] min-h-[90px] bg-zinc-900/80 border border-zinc-800 rounded-lg flex items-center justify-center text-zinc-500 text-sm overflow-hidden">
+                <!-- Insert Banner Ad Code Here (728x90) -->
+                <span>Horizontal Banner Ad Slot (728 × 90)</span>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER SECTION -->
+    <footer class="py-8 border-t border-zinc-900 text-center mt-12">
+        <p class="text-xs tracking-wider text-zinc-500">
+            Presented by <span class="font-bold text-[#ff6D00]">Tabspace</span> <span class="font-bold text-brand-green">Presentations</span> &copy; 2026. All rights reserved.
+        </p>
+    </footer>
+
+    <!-- SCRIPTS: TYPING ANIMATION & LOAD MORE LOGIC -->
+    <script>
+        const words = ["Tic Tac Toe", "Sudoku", "Gomoku", "2048 Puzzle", "Typing Speed Test", "Chess", "Checkers Classic"];
+        let i = 0;
+
+        function typingEffect() {
+            const word = words[i].split("");
+            const typedTextSpan = document.getElementById("typed-text");
+            
+            function addLetter() {
+                if (word.length > 0) {
+                    typedTextSpan.textContent += word.shift();
+                } else {
+                    setTimeout(eraseEffect, 2000);
+                    return;
+                }
+                setTimeout(addLetter, 100);
+            }
+            addLetter();
+        }
+
+        function eraseEffect() {
+            const word = words[i].split("");
+            const typedTextSpan = document.getElementById("typed-text");
+            
+            function removeLetter() {
+                if (word.length > 0) {
+                    word.pop();
+                    typedTextSpan.textContent = word.join("");
+                } else {
+                    i = (i + 1) % words.length;
+                    setTimeout(typingEffect, 500);
+                    return;
+                }
+                setTimeout(removeLetter, 50);
+            }
+            removeLetter();
+        }
+
+        // Combine all globally loaded game arrays safely
+        const allGames = [
+            ...(window.numGames || []),
+            ...(window.aGames || []),
+            ...(window.bGames || []),
+            ...(window.cGames || []),
+            ...(window.dGames || []),
+            ...(window.eGames || []),
+            ...(window.fGames || []),
+            ...(window.gGames || []),
+            ...(window.hGames || []),
+            ...(window.iGames || []),
+            ...(window.jGames || []),
+            ...(window.kGames || []),
+            ...(window.lGames || []),
+            ...(window.mGames || []),
+            ...(window.nGames || []),
+            ...(window.oGames || []),
+            ...(window.pGames || []),
+            ...(window.qGames || []),
+            ...(window.rGames || []),
+            ...(window.sGames || []),
+            ...(window.tGames || []),
+            ...(window.uGames || []),
+            ...(window.vGames || []),
+            ...(window.wGames || []),
+            ...(window.xGames || []),
+            ...(window.yGames || []),
+            ...(window.zGames || [])
+        ];
+
+        let currentIndex = 0;
+        const batchSize = 50;
+
+        function renderGames(gamesToRender, append = false) {
+            const grid = document.getElementById("playables-grid");
+            if (!append) grid.innerHTML = "";
+
+            gamesToRender.forEach(game => {
+                const card = document.createElement("div");
+                card.className = "searchable-item card-section playables-hover overflow-hidden flex flex-col group";
+                card.setAttribute("data-name", game.name.toLowerCase());
+                card.innerHTML = `
+                    <div class="p-6 flex flex-col flex-grow justify-between">
+                        <div class="flex items-center justify-between gap-4">
+                            <h4 class="text-lg text-white tracking-wide">${game.name}</h4>
+                            <a href="${game.path}" class="cta-btn-green inline-flex items-center gap-2 px-4 py-2 text-sm shrink-0">
+                                Play <span class="arrow">→</span>
+                            </a>
+                        </div>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function initLoadMore() {
+            currentIndex = Math.min(batchSize, allGames.length);
+            renderGames(allGames.slice(0, currentIndex));
+            
+            if (currentIndex >= allGames.length) {
+                document.getElementById("load-more-container").style.display = "none";
+            }
+        }
+
+        function loadMorePlayables() {
+            const nextIndex = Math.min(currentIndex + batchSize, allGames.length);
+            const remainingGames = allGames.slice(currentIndex, nextIndex);
+            renderGames(remainingGames, true);
+            currentIndex = nextIndex;
+
+            if (currentIndex >= allGames.length) {
+                document.getElementById("load-more-container").style.display = "none";
+            }
+        }
+
+        function filterPlayables() {
+            const query = document.getElementById("game-search").value.toLowerCase();
+            const loadMoreBtn = document.getElementById("load-more-container");
+
+            if (query.trim() !== "") {
+                if (loadMoreBtn) loadMoreBtn.style.display = "none";
+                const filtered = allGames.filter(game => game.name.toLowerCase().includes(query));
+                renderGames(filtered);
+            } else {
+                if (loadMoreBtn) loadMoreBtn.style.display = "";
+                renderGames(allGames.slice(0, currentIndex));
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            setTimeout(typingEffect, 1000);
+            initLoadMore();
+        });
+    </script>
+</body>
+</html>
